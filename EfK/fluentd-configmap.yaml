@@ -1,0 +1,125 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: fluentd-configmap
+  namespace: monitoring
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+data:
+  fluent.conf: |-
+    <system>
+      root_dir /tmp/fluentd-buffers/
+    </system>
+    <source>
+      @type tail
+      path /var/log/containers/*.log
+      pos_file /var/log/fluentd-containers.log.pos
+      time_format %Y-%m-%dT%H:%M:%S.%NZ
+      tag kubernetes.*
+      format json
+      read_from_head true
+    </source>
+    <source>
+      @type tail
+      @id in_tail_docker
+      path /var/log/docker.log
+      pos_file /var/log/fluentd-docker.log.pos
+      format json
+      tag docker
+      <parse>
+        @type regexp
+        expression /^time="(?<time>[^)]*)" level=(?<severity>[^ ]*) msg="(?<message>[^"]*)"( err="(?<error>[^"]*)")?( statusCode=($<status_code>\d+))?/
+      </parse>
+    </source>
+    <source>
+      @id etcd.log
+      @type tail
+      format json
+      path /var/log/etcd.log
+      pos_file /var/log/es-etcd.log.pos
+      tag etcd
+    </source>
+    <source>
+      @id kubelet.log
+      @type tail
+      time_format %m%d %H:%M:%S.%N
+      path /var/log/kubelet.log
+      pos_file /var/log/es-kubelet.log.pos
+      format json
+      tag kubelet
+    </source>
+    <source>
+      @id kube-proxy.log
+      @type tail
+      format json
+      time_format %m%d %H:%M:%S.%N
+      path /var/log/kube-proxy.log
+      pos_file /var/log/es-kube-proxy.log.pos
+      tag kube-proxy
+    </source>
+    <source>
+      @id kube-apiserver.log
+      @type tail
+      format json
+      time_format %m%d %H:%M:%S.%N
+      path /var/log/kube-apiserver.log
+      pos_file /var/log/es-kube-apiserver.log.pos
+      tag kube-apiserver
+    </source>
+    <source>
+      @id kube-controller-manager.log
+      @type tail
+      format json
+      time_format %m%d %H:%M:%S.%N
+      path /var/log/kube-controller-manager.log
+      pos_file /var/log/es-kube-controller-manager.log.pos
+      tag kube-controller-manager
+    </source>
+    <source>
+      @id kube-scheduler.log
+      @type tail
+      format json
+      time_format %m%d %H:%M:%S.%N
+      path /var/log/kube-scheduler.log
+      pos_file /var/log/es-kube-scheduler.log.pos
+      tag kube-scheduler
+    </source>
+    <source>
+      @id rescheduler.log
+      @type tail
+      format json
+      time_format %m%d %H:%M:%S.%N
+      path /var/log/rescheduler.log
+      pos_file /var/log/es-rescheduler.log.pos
+      tag rescheduler
+    </source>
+    <filter kubernetes.**>
+      @type kubernetes_metadata
+    </filter>
+    <match **>
+      @id elasticsearch
+      @type elasticsearch
+      @log_level info
+      include_tag_key true
+      host elasticsearch
+      port 9200
+      request_timeout 45s
+      reload_connections false
+      logstash_format true
+      id_key _hash        # specify same key name which is specified in hash_id_key
+      remove_keys _hash   # Elasticsearch doesn't like keys that start with _
+      <buffer>
+        @type file
+        path /var/log/fluentd-buffers/kubernetes.system.buffer
+        flush_mode interval
+        retry_type exponential_backoff
+        flush_thread_count 2
+        flush_interval 10s
+        retry_forever
+        retry_max_interval 30
+        chunk_limit_size 8M
+        queue_limit_length 256
+        overflow_action block
+      </buffer>
+    </match>

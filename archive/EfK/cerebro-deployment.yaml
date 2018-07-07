@@ -1,0 +1,63 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cerebro
+  namespace: monitoring
+  labels:
+    app: cerebro
+    kubernetes.io/name: "Cerebro"
+spec:
+  ports:
+  - port: 9000
+    protocol: TCP
+    targetPort: 9000
+  selector:
+    app: cerebro
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cerebro
+  namespace: monitoring
+  labels:
+    app: cerebro
+spec:
+  selector:
+    matchLabels:
+      app: cerebro
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cerebro
+    spec:
+      serviceAccountName: cerebro
+      containers:
+      - name: cerebro
+        image: feedyard/cerebro
+        env:
+        - name: ELASTICSEARCH_URL
+          value: "elasticsearch:9200"
+        - name: JAVA_OPTS
+          value: "-Djava.net.preferIPv4Stack=true -Xms128m -Xmx128m"
+#        resources:
+#          limits:
+#            cpu: 500m
+#            memory: 512Mi
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9000
+          timeoutSeconds: 1
+          successThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9000
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+        ports:
+        - containerPort: 9000
+          protocol: TCP
