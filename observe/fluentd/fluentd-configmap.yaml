@@ -107,8 +107,8 @@ data:
       request_timeout 45s
       reload_connections false
       logstash_format true
-      id_key _hash        # specify same key name which is specified in hash_id_key
-      remove_keys _hash   # Elasticsearch doesn't like keys that start with _
+      id_key _hash
+      remove_keys _hash
       <buffer>
         @type file
         path /var/log/fluentd-buffers/kubernetes.system.buffer

@@ -40,7 +40,7 @@ spec:
         image: docker.elastic.co/kibana/kibana-oss:6.3.0
         env:
         - name: CLUSTER_NAME
-          value: elasticsearch-db
+          value: "docker-cluster"
         resources:
           limits:
             cpu: 1000m

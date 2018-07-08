@@ -1,13 +1,29 @@
-<source>
-      @type tail
-      path /var/log/containers/*.log
-      pos_file /var/log/fluentd-containers.log.pos
-      time_format %Y-%m-%dT%H:%M:%S.%NZ
-      tag kubernetes.*
-      format json
-      read_from_head true
-    </source>
-
+    <match **>
+      @id elasticsearch
+      @type elasticsearch
+      @log_level info
+      include_tag_key true
+      host elasticsearch
+      port 9200
+      request_timeout 45s
+      reload_connections false
+      logstash_format true
+      id_key _hash        # specify same key name which is specified in hash_id_key
+      remove_keys _hash   # Elasticsearch doesn't like keys that start with _
+      <buffer>
+        @type file
+        path /var/log/fluentd-buffers/kubernetes.system.buffer
+        flush_mode interval
+        retry_type exponential_backoff
+        flush_thread_count 2
+        flush_interval 10s
+        retry_forever
+        retry_max_interval 30
+        chunk_limit_size 8M
+        queue_limit_length 256
+        overflow_action block
+      </buffer>
+    </match>
 ---
 kind: ConfigMap
 apiVersion: v1

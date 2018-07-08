@@ -16,7 +16,7 @@ exit 0
 
 # Simple Defaults
 CLUSTER_DOMAIN=cluster.local
-YAML_TEMPLATE=`pwd`/coredns.yaml.sed
+YAML_TEMPLATE=`pwd`/dns/coredns.yaml.sed
 
 
 # Get Opts

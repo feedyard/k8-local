@@ -1,0 +1,4 @@
+
+Note port references from result of traefik describe: e.g., change port number to match output
+
+Kibana gui:         http://localhost:<traefik web port>/     # Note: nothing past the /

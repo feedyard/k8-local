@@ -6,41 +6,37 @@ metadata:
   namespace: kube-system
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  name: system:coredns
+  namespace: kube-system
   labels:
     kubernetes.io/bootstrapping: rbac-defaults
-  name: system:coredns
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - endpoints
-  - services
-  - pods
-  - namespaces
-  verbs:
-  - list
-  - watch
+  - apiGroups: [""]
+    resources: ["endpoints","services","pods","namespaces"]
+    verbs: ["list","watch"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
+  name: system:coredns
+  namespace: kube-system
   annotations:
     rbac.authorization.kubernetes.io/autoupdate: "true"
   labels:
     kubernetes.io/bootstrapping: rbac-defaults
-  name: system:coredns
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
   name: system:coredns
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
 subjects:
 - kind: ServiceAccount
   name: coredns
   namespace: kube-system
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -64,27 +60,27 @@ data:
     }
 
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: coredns
   namespace: kube-system
   labels:
-    k8s-app: kube-dns
+    app: kube-dns
     kubernetes.io/name: "CoreDNS"
 spec:
+  selector:
+    matchLabels:
+      app: kube-dns
   replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 1
-  selector:
-    matchLabels:
-      k8s-app: kube-dns
   template:
     metadata:
       labels:
-        k8s-app: kube-dns
+        app: kube-dns
     spec:
       serviceAccountName: coredns
       tolerations:
@@ -145,12 +141,12 @@ metadata:
     prometheus.io/port: "9153"
     prometheus.io/scrape: "true"
   labels:
-    k8s-app: kube-dns
+    app: kube-dns
     kubernetes.io/cluster-service: "true"
     kubernetes.io/name: "CoreDNS"
 spec:
   selector:
-    k8s-app: kube-dns
+    app: kube-dns
   clusterIP: CLUSTER_DNS_IP
   ports:
   - name: dns
