@@ -122,13 +122,14 @@ plugins: ""
 ## Configure grafana datasources
 ## ref: http://docs.grafana.org/administration/provisioning/#datasources
 ##
-datasources: {}
+datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
     - name: Prometheus
       type: prometheus
-      url: http://prometheus-server
+      url: http://prometheus-server:80
+      access: proxy
       isDefault: true
 
 ## Configure grafana dashboard providers
@@ -155,6 +156,7 @@ dashboardProviders: {}
 ##
 ## dashboards per provider, use provider name as key.
 ##
+## to deploy: 5309, 5225
 dashboards: {}
 #  default:
 #    some-dashboard:
