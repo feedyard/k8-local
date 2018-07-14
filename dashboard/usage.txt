@@ -1,0 +1,4 @@
+
+Note port references from result of service describe: e.g., change port number to match output
+
+kubernetes-dashboard gui:         http://localhost:<NodePort>

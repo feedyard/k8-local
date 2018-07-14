@@ -3,26 +3,27 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kibana
-  namespace: monitoring
   labels:
     app: kibana
+  namespace: monitoring
 spec:
   selector:
     app: kibana
   ports:
   - name: http
-    port: 5601
-    targetPort: 5601
+    port: 80
+    targetPort: http
     protocol: TCP
+  type: NodePort
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kibana
-  namespace: monitoring
   labels:
     app: kibana
+  namespace: monitoring
 spec:
   selector:
     matchLabels:
@@ -35,21 +36,23 @@ spec:
       labels:
         app: kibana
     spec:
+      serviceAccountName: kibana
       containers:
       - name: kibana
         image: docker.elastic.co/kibana/kibana-oss:6.3.0
+        imagePullPolicy: IfNotPresent
         env:
         - name: CLUSTER_NAME
           value: "docker-cluster"
+        ports:
+        - name: http
+          containerPort: 5601
+          protocol: TCP
         resources:
           limits:
             cpu: 1000m
           requests:
             cpu: 100m
-        ports:
-        - containerPort: 5601
-          name: http
-          protocol: TCP
         volumeMounts:
         - name: config
           mountPath: /usr/share/kibana/kibana.yml

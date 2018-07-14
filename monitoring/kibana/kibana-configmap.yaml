@@ -3,9 +3,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: kibana-configmap
-  namespace: monitoring
   labels:
     app: kibana
+  namespace: monitoring
 data:
   kibana.yml:  |+
     # Kibana is served by a back end server. This setting specifies the port to use.

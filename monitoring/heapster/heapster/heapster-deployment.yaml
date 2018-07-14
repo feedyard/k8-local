@@ -2,29 +2,28 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: heapster
   labels:
+    app: heapster
     task: monitoring
-    # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
-    # If you are NOT using this as an addon, you should comment out this line.
     kubernetes.io/cluster-service: 'true'
     kubernetes.io/name: Heapster
-  name: heapster
   namespace: kube-system
 spec:
-  ports:
-  - port: 80
-    targetPort: 8082
   selector:
     app: heapster
+  ports:
+  - port: 80
+    targetPort: http
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: heapster
-  namespace: kube-system
   labels:
     app: heapster
+  namespace: kube-system
 spec:
   selector:
     matchLabels:
@@ -33,18 +32,30 @@ spec:
   template:
     metadata:
       labels:
-        task: monitoring
         app: heapster
+        task: monitoring
     spec:
       serviceAccountName: heapster
       containers:
       - name: heapster
         image: k8s.gcr.io/heapster-amd64:v1.5.3
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
         imagePullPolicy: IfNotPresent
         command:
         - /heapster
-        - --source=kubernetes:https://kubernetes.default
+        - --source=kubernetes.summary_api:''
+        - --sink=influxdb:http://influxdb.monitoring:8086
+        ports:
+        - name: api
+          containerPort: 9090
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: api
+            scheme: HTTP
+          initialDelaySeconds: 180
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi

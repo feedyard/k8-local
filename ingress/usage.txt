@@ -1,5 +1,0 @@
-
-Note port references from result of traefik describe: e.g., change port number to match output
-
-Traefik admin:         http://localhost:32527/dashboard/
-Kubernetes dashboard:  http://localhost:31432/console
