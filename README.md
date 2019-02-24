@@ -13,3 +13,5 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | gre
 3. Access dashbaord:  http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 4. Use the provided Token
 
+
+
