@@ -5,7 +5,7 @@ metadata:
   name: fluentd-configmap
   labels:
     addonmanager.kubernetes.io/mode: Reconcile
-  namespace: monitoring
+  namespace: kube-system
 data:
   fluent.conf: |-
     <system>

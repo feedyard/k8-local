@@ -1,34 +1,34 @@
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: grafana
-  labels:
-    app: grafana
-  namespace: monitoring
-
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: grafana
-  namespace: monitoring
-rules:
-- apiGroups: [""]
-  resources: ["services","endpoints","pods"]
-  verbs: ["get", "list", "watch"]
-
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: grafana
-  namespace: monitoring
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: grafana
-subjects:
-- kind: ServiceAccount
-  name: grafana
-  namespace: monitoring
+#---
+#apiVersion: v1
+#kind: ServiceAccount
+#metadata:
+#  name: grafana
+#  labels:
+#    app: grafana
+#  namespace: monitoring
+#
+#---
+#kind: Role
+#apiVersion: rbac.authorization.k8s.io/v1
+#metadata:
+#  name: grafana
+#  namespace: monitoring
+#rules:
+#- apiGroups: [""]
+#  resources: ["services","endpoints","pods"]
+#  verbs: ["get", "list", "watch"]
+#
+#---
+#kind: RoleBinding
+#apiVersion: rbac.authorization.k8s.io/v1
+#metadata:
+#  name: grafana
+#  namespace: monitoring
+#roleRef:
+#  apiGroup: rbac.authorization.k8s.io
+#  kind: Role
+#  name: grafana
+#subjects:
+#- kind: ServiceAccount
+#  name: grafana
+#  namespace: monitoring

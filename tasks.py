@@ -6,13 +6,14 @@ def init(ctx, edge=False):
 
     if edge:
         print('includes edge options')
-        ctx.run('bash ./dns/update_dns.sh | kubectl apply -f -')
-        ctx.run('kubectl delete --namespace=kube-system deployment kube-dns')
 
     print('initial config')
     ctx.run('kubectl apply -f metrics-server-1.8+/')
+    ctx.run('kubectl apply -f monitoring/eventrouter/')
     ctx.run('kubectl apply -f dashboard/')
-    ctx.run('kubectl describe svc kubernetes-dashboard -n kube-system')
+    ctx.run("kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')")
+    ctx.run('cat README.md')
+
 
 @task(optional=['edge'])
 def monitor(ctx, edge=False):
@@ -21,7 +22,7 @@ def monitor(ctx, edge=False):
         print('no edge options for monitoring yet')
 
     print('deploy monitoring tools')
-    ctx.run('kubectl apply -f monitoring/monitoring-namespace.yaml')
+    #ctx.run('kubectl apply -f monitoring/monitoring-namespace.yaml')
     ctx.run('kubectl apply -f monitoring/heapster/influxdb/')
     time.sleep(20)
     ctx.run('kubectl apply -f monitoring/heapster/heapster/')

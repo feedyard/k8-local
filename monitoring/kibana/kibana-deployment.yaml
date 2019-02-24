@@ -5,7 +5,7 @@ metadata:
   name: kibana
   labels:
     app: kibana
-  namespace: monitoring
+  namespace: kube-system
 spec:
   selector:
     app: kibana
@@ -23,7 +23,7 @@ metadata:
   name: kibana
   labels:
     app: kibana
-  namespace: monitoring
+  namespace: kube-system
 spec:
   selector:
     matchLabels:
@@ -39,7 +39,7 @@ spec:
       serviceAccountName: kibana
       containers:
       - name: kibana
-        image: docker.elastic.co/kibana/kibana-oss:6.3.0
+        image: docker.elastic.co/kibana/kibana-oss:6.6.0
         imagePullPolicy: IfNotPresent
         env:
         - name: CLUSTER_NAME

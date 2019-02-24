@@ -5,7 +5,7 @@ metadata:
   name: kibana-configmap
   labels:
     app: kibana
-  namespace: monitoring
+  namespace: kube-system
 data:
   kibana.yml:  |+
     # Kibana is served by a back end server. This setting specifies the port to use.

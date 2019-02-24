@@ -1,4 +1,4 @@
-
-Note port references from result of service describe: e.g., change port number to match output
-
-kubernetes-dashboard gui:         http://localhost:<NodePort>
+1. Copy token from Data section
+2. run `kubectl proxy`
+3. Access dashbaord:  http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+4. Use the provided Token
