@@ -1,0 +1,17 @@
+---
+# Source: istio/charts/kiali/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kiali
+  namespace: istio-system
+  labels:
+    app: kiali
+spec:
+  ports:
+  - name: tcp
+    protocol: TCP
+    port: 20001
+    name: http-kiali
+  selector:
+    app: kiali

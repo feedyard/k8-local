@@ -1,0 +1,26 @@
+---
+# Source: istio/charts/ingress/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: istio-ingress
+  namespace: istio-system
+  labels:
+    chart: ingress-1.0.6
+    release: istio
+    heritage: Tiller
+    istio: ingress
+  annotations:
+spec:
+  type: LoadBalancer
+  selector:
+    istio: ingress
+  ports:
+    -
+      name: http
+      nodePort: 32000
+      port: 80
+    -
+      name: https
+      port: 443
+---

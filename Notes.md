@@ -38,3 +38,55 @@ kubectl port-forward $(kubectl get  pods --selector=app=kube-prometheus-grafana 
 
 # for the alert monitor
 # kubectl port-forward -n monitoring alertmanager-kube-prometheus-0 9093
+
+
+
+
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: fluentd-logzio
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logzio
+    version: v1
+    kubernetes.io/cluster-service: "true"
+spec:
+  template:
+    metadata:
+      labels:
+        k8s-app: fluentd-logzio
+        version: v1
+        kubernetes.io/cluster-service: "true"
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: fluentd
+        image: logzio/logzio-k8s:1.0.0
+        env:
+          - name:  LOGZIO_TOKEN
+            value: "your logz.io account token"
+          - name:  LOGZIO_URL
+            value: "your logz.io host url" ##example:https://listener.logz.io:8071  
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+    readOnly: true
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers

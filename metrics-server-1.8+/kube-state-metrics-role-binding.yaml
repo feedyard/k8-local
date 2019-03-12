@@ -9,6 +9,6 @@ roleRef:
   kind: Role
   name: kube-state-metrics-resizer
 subjects:
-- kind: ServiceAccount
-  name: kube-state-metrics
-  namespace: kube-system
+  - kind: ServiceAccount
+    name: kube-state-metrics
+    namespace: kube-system

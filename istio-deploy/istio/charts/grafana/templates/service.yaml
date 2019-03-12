@@ -1,0 +1,22 @@
+---
+# Source: istio/charts/grafana/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: istio-system
+  annotations:
+  labels:
+    app: istio-grafana
+    chart: grafana-1.0.6
+    release: istio
+    heritage: Tiller
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  selector:
+    app: grafana
