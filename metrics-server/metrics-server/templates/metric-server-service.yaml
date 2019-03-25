@@ -1,0 +1,20 @@
+---
+# Source: metrics-server/templates/metric-server-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: metrics-server
+  namespace: kube-system
+  labels:
+    app: metrics-server
+    chart: metrics-server-2.5.0
+    release: metrics-server
+    heritage: Tiller
+spec:
+  ports:
+    - port: 443
+      protocol: TCP
+      targetPort: 443
+  selector:
+    app: metrics-server
+    release: metrics-server

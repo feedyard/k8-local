@@ -1,10 +1,17 @@
 from invoke import task
 from subprocess import run, PIPE
 
+METRICS_SERVER_CHART_VERSION='2.5.0'
+METRICS_SERVER_VERSION='v0.3.1'
+
+DASHBOARD_VERSION='v1.10.1'
+
+ISTIO_VERSION='1.0.6'
+
 @task
 def init(ctx):
     print('baseline config')
-    ctx.run('kubectl apply -f metrics-server-1.8+/')
+    ctx.run('kubectl apply -f metrics-server/ --recursive')
     ctx.run('kubectl apply -f eventrouter/')
     ctx.run('kubectl apply -f dashboard/')
     p = run("kubectl -n kube-system describe secret kubernetes-dashboard-token | awk '{for(i=1;i<=NF;i++) {if($i~\"token:\") {print $(i+1)}}}'", shell=True, stdout=PIPE, encoding='ascii')
@@ -23,13 +30,13 @@ def dash(ctx):
 
 @task
 def istio(ctx):
-    ctx.run('kubectl apply -f istio-1.0.6/install/kubernetes/namespace.yaml ')
+    ctx.run('kubectl apply -f charts/istio-' + ISTIO_VERSION + '/install/kubernetes/namespace.yaml ')
     ctx.run('kubectl apply -f istio-deploy/istio/templates --recursive')
     ctx.run('kubectl apply -f istio-deploy/istio/charts --recursive')
 
 @task
 def kiali(ctx):
-    CMD = "helm template istio-1.0.6/install/kubernetes/helm/istio --name istio --namespace istio-system " \
+    CMD = "helm template istio-" + ISTIO_VERSION + "/install/kubernetes/helm/istio --name istio --namespace istio-system " \
           "--set kiali.enabled=true " \
           "--set \"kiali.dashboard.jaegerURL=http://$(kubectl get svc tracing -n istio-system -o jsonpath='{.spec.clusterIP}'):80\" " \
           "--set \"kiali.dashboard.grafanaURL=http://$(kubectl get svc grafana -n istio-system -o jsonpath='{.spec.clusterIP}'):3000\" " \
@@ -53,8 +60,20 @@ def efk(ctx, logzio=False):
         ctx.run('kubectl describe svc kibana -n kube-system')
 
 @task
+def generatemetricsserver(ctx):
+    CMD = "helm template charts/metrics-server-" + METRICS_SERVER_VERSION + "/metrics-server --name metrics-server --namespace kube-system " \
+          "--set rbac.create=true " \
+          "--set serviceAccount.create=true " \
+          "--set serviceAccount.name=metrics-server " \
+          "--set apiService.create=true " \
+          "--set image.tag=" + METRICS_SERVER_VERSION + " " \
+          "--set args={--logtostderr\,--metric-resolution=10s} " \
+          "--output-dir metrics-server"
+    ctx.run(CMD)
+
+@task
 def generateistio(ctx):
-    CMD = "helm template istio-1.0.6/install/kubernetes/helm/istio --name istio --namespace istio-system " \
+    CMD = "helm template charts/istio-" + ISTIO_VERSION + "/install/kubernetes/helm/istio --name istio --namespace istio-system " \
           "--set grafana.enabled=true " \
           "--set tracing.enabled=true " \
           "--set prometheus.enabled=true " \
@@ -74,17 +93,25 @@ def generateistio(ctx):
 
 
 @task
-def update(ctx):
+def update(ctx, service):
     # update versions to current
-    K8_EVENT_ROUTER="eventrouter.yaml"
-    K8_EVENT_ROUTER_PATH="https://raw.githubusercontent.com/heptiolabs/eventrouter/master/yaml/" + K8_EVENT_ROUTER
-    ctx.run('curl -L {0} -o {1} && mv {1} monitoring/eventrouter/{1}'.format(K8_EVENT_ROUTER_PATH,K8_EVENT_ROUTER))
 
-    DASHBOARD="kubernetes-dashboard.yaml"
-    DASHBOARD_PATH="https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/" + DASHBOARD
-    ctx.run('curl -L {0} -o {1} && mv {1} dashboard/{1}'.format(DASHBOARD_PATH, DASHBOARD))
+    if service == 'metrics-server':
+        ctx.run('helm fetch stable/metrics-server -d charts --untar --untardir metrics-server-{} --version={}'.format(METRICS_SERVER_VERSION, METRICS_SERVER_CHART_VERSION))
+        print('add namespace directives to metrics-server templates')
 
-    ctx.run('curl -L https://git.io/getLatestIstio | sh -')
+    if service == 'eventrouter':
+        K8_EVENT_ROUTER="eventrouter.yaml"
+        K8_EVENT_ROUTER_PATH="https://raw.githubusercontent.com/heptiolabs/eventrouter/master/yaml/" + K8_EVENT_ROUTER
+        ctx.run('curl -L {0} -o {1} && mv {1} eventrouter/{1}'.format(K8_EVENT_ROUTER_PATH,K8_EVENT_ROUTER))
+
+    if service == 'dashboard':
+        DASHBOARD="kubernetes-dashboard.yaml"
+        DASHBOARD_PATH="https://raw.githubusercontent.com/kubernetes/dashboard/" + DASHBOARD_VERSION + "v1.10.1/src/deploy/recommended/" + DASHBOARD
+        ctx.run('curl -L {0} -o {1} && mv {1} dashboard/{1}'.format(DASHBOARD_PATH, DASHBOARD))
+
+    if service == 'istio':
+        ctx.run('curl -L https://git.io/getLatestIstio | sh -')
 
 @task
 def cheat(ctx):

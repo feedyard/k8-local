@@ -1,0 +1,19 @@
+---
+# Source: metrics-server/templates/aggregated-metrics-reader-cluster-role.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: system:metrics-server-aggregated-reader
+  namespace: kube-system
+  labels:
+    app: metrics-server
+    chart: metrics-server-2.5.0
+    release: metrics-server
+    heritage: Tiller
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+rules:
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]

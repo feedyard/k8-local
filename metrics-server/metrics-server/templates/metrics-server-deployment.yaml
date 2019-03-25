@@ -1,0 +1,33 @@
+---
+# Source: metrics-server/templates/metrics-server-deployment.yaml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: metrics-server
+  namespace: kube-system
+  labels:
+    app: metrics-server
+    chart: metrics-server-2.5.0
+    release: metrics-server
+    heritage: Tiller
+spec:
+  selector:
+    matchLabels:
+      app: metrics-server
+      release: metrics-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: metrics-server
+        release: metrics-server
+    spec:
+      serviceAccountName: metrics-server
+      containers:
+        - name: metrics-server
+          image: "gcr.io/google_containers/metrics-server-amd64:v0.3.1"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /metrics-server
+            - "--logtostderr"
+            - "--metric-resolution=10s"

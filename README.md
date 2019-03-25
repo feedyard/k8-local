@@ -17,12 +17,15 @@ edit the following line: (_add text in bold_)
 
 Restart Docker for Mac  
 
-2. Get latest versions of services
+2. Get desired versions of services
+
+Edit tasks.py CONSTANTS to set desired versions.  
 
 ```bash
-$ invoke update
+$ invoke update metrics-server | eventrouter | istio
 ```
 
+Note: istio will retrieve latest. Use CONSTANT to select installed version  
 
 3. Deploy metrics server and dashboard  
 
@@ -31,11 +34,9 @@ $ invoke init
 ```
 
 Deploys:  
-• [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics)
+• [metrics-server](https://github.com/kubernetes-incubator/metrics-server)
 • [eventrouter](https://github.com/heptiolabs/eventrouter)
 • [kubernetes dashboard](https://github.com/kubernetes/dashboard) (_recommend not using dashboard on remote clusters_)
-
-
 
 4. Install istio (see section below on how deploy templates were generates)
 
