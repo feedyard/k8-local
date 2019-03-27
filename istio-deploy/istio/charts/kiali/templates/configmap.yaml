@@ -13,6 +13,6 @@ data:
       port: 20001
     external_services:
       jaeger:
-        url: http://10.111.190.84:80
+        url: 
       grafana:
-        url: http://10.99.75.42:3000
+        url: 

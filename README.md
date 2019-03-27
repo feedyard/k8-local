@@ -38,18 +38,15 @@ Deploys:
 • [eventrouter](https://github.com/heptiolabs/eventrouter)
 • [kubernetes dashboard](https://github.com/kubernetes/dashboard) (_recommend not using dashboard on remote clusters_)
 
-4. Install istio (see section below on how deploy templates were generates)
-
-
-Generate kubernetes deployment  
+4. Install istio (see `tasks.py` for how deploy templates were generates)
+ 
+ 
 ```bash
 $ invoke generateistio
+$ invoke istio
+$ invoke kiali
 ```
 
-Deploy istio
-```bash
-invoke istio
-```
 
 ### dependencies  
 

@@ -95,4 +95,4 @@ spec:
       name: usr-share-ca-certificates
 status: {}
 
-  Verify MutatingAdmissionWebhook and ValidatingAdmissionWebhook plugins are listed in the kube-apiserver --enable-admission-plugins. Access to this flag is provider specific.
+#  Verify MutatingAdmissionWebhook and ValidatingAdmissionWebhook plugins are listed in the kube-apiserver --enable-admission-plugins. Access to this flag is provider specific.

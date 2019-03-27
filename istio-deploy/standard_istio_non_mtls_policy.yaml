@@ -1,0 +1,139 @@
+# istio policy overrides for kubernetes and istio control plane
+---
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: istio-ports-mtls-disabled
+  namespace: istio-system
+spec:
+  targets:
+    - name: istio-citadel
+      ports:
+        - number: 9093
+        - number: 8060
+    - name: istio-galley
+      ports:
+        - number: 443
+        - number: 9093
+    - name: istio-pilot
+      ports:
+        - number: 8080
+        - number: 9093
+        - number: 15010
+        - number: 15011
+    - name: istio-policy
+      ports:
+        - number: 9091
+        - number: 9093
+        - number: 15004
+    - name: istio-telemetry
+      ports:
+        - number: 9091
+        - number: 9093
+        - number: 15004
+        - number: 42422
+    - name: istio-egressgateway
+      ports:
+        - number: 443
+        - number: 80
+    - name: istio-ingress
+      ports:
+        - number: 443
+        - number: 80
+    - name: istio-ingressgateway
+      ports:
+        - number: 443
+        - number: 80
+        - number: 853
+        - number: 8060
+        - number: 15011
+        - number: 15030
+        - number: 15031
+        - number: 31400
+    - name: istio-sidecar-injector
+      ports:
+        - number: 443
+    - name: jaeger-agent
+      ports:
+        - number: 5775
+        - number: 6831
+        - number: 6832
+    - name: jaeger-collector
+      ports:
+        - number: 14267
+        - number: 14268
+    - name: jaeger-query
+      ports:
+        - number: 16686
+    - name: zipkin
+      ports:
+        - number: 9411
+    - name: tracing
+      ports:
+        - number: 80
+    - name: prometheus
+      ports:
+        - number: 9090
+    - name: kiali
+      ports:
+        - number: 20001
+
+---
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: metrics-server-ports-mtls-disabled
+  namespace: kube-system
+spec:
+  targets:
+    - name: metrics-server
+      ports:
+        - number: 443
+
+---
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: kube-dns-ports-mtls-disabled
+  namespace: kube-system
+spec:
+  targets:
+    - name: kube-dns
+      ports:
+        - number: 53
+
+---
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: kubernetes-api-ports-mtls-disabled
+  namespace: default
+spec:
+  targets:
+    - name: kubernetes
+      ports:
+        - number: 443
+
+---
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: kubernetes-dashboard-ports-mtls-disabled
+  namespace: kube-system
+spec:
+  targets:
+    - name: kubernetes-dashboard
+      ports:
+        - number: 443
+
+---
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: docker-compose-mtls-disabled
+  namespace: docker
+spec:
+  targets:
+    - name: compose-api
+      ports:
+        - number: 443

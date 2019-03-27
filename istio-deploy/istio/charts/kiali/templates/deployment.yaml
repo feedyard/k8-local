@@ -1,0 +1,64 @@
+---
+# Source: istio/charts/kiali/templates/deployment.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kiali
+  namespace: istio-system
+  labels:
+    app: kiali
+    chart: kiali-1.0.6
+    release: istio
+    heritage: Tiller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kiali
+  template:
+    metadata:
+      name: kiali
+      labels:
+        app: kiali
+      annotations:
+        sidecar.istio.io/inject: "false"
+        scheduler.alpha.kubernetes.io/critical-pod: ""
+    spec:
+      serviceAccountName: kiali-service-account
+      containers:
+      - image: "docker.io/kiali/kiali:v0.12"
+        name: kiali
+        command:
+        - "/opt/kiali/kiali"
+        - "-config"
+        - "/kiali-configuration/config.yaml"
+        - "-v"
+        - "4"
+        env:
+        - name: ACTIVE_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: SERVER_CREDENTIALS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: kiali
+              key: username
+        - name: SERVER_CREDENTIALS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: kiali
+              key: passphrase
+        - name: PROMETHEUS_SERVICE_URL
+          value: http://prometheus:9090
+        volumeMounts:
+        - name: kiali-configuration
+          mountPath: "/kiali-configuration"
+        resources:
+          requests:
+            cpu: 10m
+          
+      volumes:
+      - name: kiali-configuration
+        configMap:
+          name: kiali

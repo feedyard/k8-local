@@ -33,10 +33,11 @@ def istio(ctx):
     ctx.run('kubectl apply -f charts/istio-' + ISTIO_VERSION + '/install/kubernetes/namespace.yaml ')
     ctx.run('kubectl apply -f istio-deploy/istio/templates --recursive')
     ctx.run('kubectl apply -f istio-deploy/istio/charts --recursive')
+    ctx.run('kubectl apply -f istio-deploy/standard-istio-non_mtls_policy.yaml')
 
 @task
 def kiali(ctx):
-    CMD = "helm template istio-" + ISTIO_VERSION + "/install/kubernetes/helm/istio --name istio --namespace istio-system " \
+    CMD = "helm template charts/istio-" + ISTIO_VERSION + "/install/kubernetes/helm/istio --name istio --namespace istio-system " \
           "--set kiali.enabled=true " \
           "--set \"kiali.dashboard.jaegerURL=http://$(kubectl get svc tracing -n istio-system -o jsonpath='{.spec.clusterIP}'):80\" " \
           "--set \"kiali.dashboard.grafanaURL=http://$(kubectl get svc grafana -n istio-system -o jsonpath='{.spec.clusterIP}'):3000\" " \
@@ -74,19 +75,23 @@ def generatemetricsserver(ctx):
 @task
 def generateistio(ctx):
     CMD = "helm template charts/istio-" + ISTIO_VERSION + "/install/kubernetes/helm/istio --name istio --namespace istio-system " \
-          "--set grafana.enabled=true " \
-          "--set tracing.enabled=true " \
-          "--set prometheus.enabled=true " \
+          "--set security.enabled=true " \
+          "--set ingress.enabled=true " \
+          "--set gateways.istio-ingressgateway.enabled=true " \
+          "--set gateways.istio-egressgateway.enabled=true " \
+          "--set gateways.istio-ingressgateway.type=NodePort " \
+          "--set gateways.istio-egressgateway.type=NodePort " \
           "--set pilot.sidecar=true " \
           "--set galley.enabled=true " \
           "--set mixer.enabled=true " \
+          "--set grafana.enabled=true " \
+          "--set tracing.enabled=true " \
+          "--set kiali.enabled=true " \
+          "--set prometheus.enabled=true " \
           "--set sidecarInjectorWebhook.enabled=true " \
-          "--set security.enabled=true " \
-          "--set ingress.enabled=true " \
-          "--set gateways.istio-ingressgateway.type=NodePort " \
-          "--set gateways.istio-egressgateway.type=NodePort " \
-          "--set gateways.istio-ingressgateway.enabled=true " \
-          "--set gateways.istio-egressgateway.enabled=true " \
+          "--set global.refreshInterval=3s " \
+          "--set global.proxy.envoyStatsd.enabled=false " \
+          "--set global.disablePolicyChecks=false " \
           "--set global.proxy.envoyStatsd.enabled=false " \
           "--output-dir istio-deploy"
     ctx.run(CMD)
