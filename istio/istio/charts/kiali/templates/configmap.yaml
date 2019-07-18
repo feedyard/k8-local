@@ -1,0 +1,27 @@
+---
+# Source: istio/charts/kiali/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiali
+  namespace: istio-system
+  labels:
+    app: kiali
+    chart: kiali
+    heritage: Tiller
+    release: istio
+data:
+  config.yaml: |
+    istio_namespace: istio-system
+    auth:
+      strategy: "login"
+    server:
+      port: 20001
+      web_root: /kiali
+    external_services:
+      tracing:
+        url: 
+      grafana:
+        url: 
+      prometheus:
+        url: http://prometheus:9090

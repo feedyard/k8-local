@@ -90,3 +90,6 @@ spec:
       - name: varlibdockercontainers
         hostPath:
           path: /var/lib/docker/containers
+ 
+ 
+ 

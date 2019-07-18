@@ -1,0 +1,114 @@
+---
+# Source: istio/charts/grafana/templates/create-custom-resources-job.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: istio-grafana-post-install-account
+  namespace: istio-system
+  labels:
+    app: grafana
+    chart: grafana
+    heritage: Tiller
+    release: istio
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: istio-grafana-post-install-istio-system
+  labels:
+    app: grafana
+    chart: grafana
+    heritage: Tiller
+    release: istio
+rules:
+- apiGroups: ["authentication.istio.io"] # needed to create default authn policy
+  resources: ["*"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: istio-grafana-post-install-role-binding-istio-system
+  labels:
+    app: grafana
+    chart: grafana
+    heritage: Tiller
+    release: istio
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: istio-grafana-post-install-istio-system
+subjects:
+  - kind: ServiceAccount
+    name: istio-grafana-post-install-account
+    namespace: istio-system
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: istio-grafana-post-install-1.2.2
+  namespace: istio-system
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-succeeded
+  labels:
+    app: grafana
+    chart: grafana
+    heritage: Tiller
+    release: istio
+spec:
+  template:
+    metadata:
+      name: istio-grafana-post-install
+      labels:
+        app: istio-grafana
+        chart: grafana
+        heritage: Tiller
+        release: istio
+    spec:
+      serviceAccountName: istio-grafana-post-install-account
+      containers:
+        - name: kubectl
+          image: "docker.io/istio/kubectl:1.2.2"
+          command: [ "/bin/bash", "/tmp/grafana/run.sh", "/tmp/grafana/custom-resources.yaml" ]
+          volumeMounts:
+            - mountPath: "/tmp/grafana"
+              name: tmp-configmap-grafana
+      volumes:
+        - name: tmp-configmap-grafana
+          configMap:
+            name: istio-grafana-custom-resources
+      restartPolicy: OnFailure
+      affinity:      
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - ppc64le
+                - s390x
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - ppc64le
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - s390x      

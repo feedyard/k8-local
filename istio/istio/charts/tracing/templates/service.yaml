@@ -1,0 +1,53 @@
+---
+# Source: istio/charts/tracing/templates/service.yaml
+apiVersion: v1
+kind: List
+metadata:
+  name: tracing-services
+  namespace: istio-system
+  labels:
+    app: jaeger
+    chart: tracing
+    heritage: Tiller
+    release: istio
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: zipkin
+    namespace: istio-system
+    labels:
+      app: jaeger
+      chart: tracing
+      heritage: Tiller
+      release: istio
+  spec:
+    type: ClusterIP
+    ports:
+      - port: 9411
+        targetPort: 9411
+        protocol: TCP
+        name: http
+    selector:
+      app: jaeger
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: tracing
+    namespace: istio-system
+    annotations:
+    labels:
+      app: jaeger
+      chart: tracing
+      heritage: Tiller
+      release: istio
+  spec:
+    ports:
+      - name: http-query
+        port: 80
+        protocol: TCP
+
+        targetPort: 16686
+
+    selector:
+      app: jaeger
