@@ -1,9 +1,9 @@
 # feedyard/k8-local
 
-_review the dependencies section below for laptop setup_  
+_basic setup for local kubernetes development_  
 
 Starting with a fresh install of docker-for-mac and kubernetes  
-(setting memory available to docker resources to 8gb recommended)  
+(setting memory available to docker resources to 8gb)  
 
 ## 1. Edit kubernetes manifest for AdmissionController settings  
 ```bash
