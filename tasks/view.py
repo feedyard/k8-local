@@ -15,13 +15,10 @@ def istio(ctx, window=False):
     os.system(jaeger)
     os.system(kiali)
 
-    if window:
-        ctx.run('open dashboard/istio-ui.html')
-
 @task
 def dash(ctx):
     """proxy kubernetes web ui and open window"""
-    p = run("kubectl -n kube-system describe secret kubernetes-dashboard-head-token | awk '{for(i=1;i<=NF;i++) {if($i~\"token:\") {print $(i+1)}}}'", shell=True, stdout=PIPE, encoding='ascii')
+    p = run("kubectl -n kube-system describe secret admin-user-token | awk '{for(i=1;i<=NF;i++) {if($i~/token:/) print $(i+1)}}'", shell=True, stdout=PIPE, encoding='ascii')
     cmd = "echo \"{}\" | pbcopy".format(p.stdout)
     ctx.run(cmd)
     print('dashboard token copied to clipboard')

@@ -1,11 +1,8 @@
 # cheatsheet.md
 
-##
 ## how port-forwards are configured for various services
 
 ### istio  
-
-Note: see `tasks\view.py` for a shortcut to viewing the istio UI  
 
 #### prometheus
 
@@ -38,3 +35,4 @@ $ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=
 ```
 
 http://localhost:20001/kiali/console  
+

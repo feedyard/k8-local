@@ -33,23 +33,14 @@ $ invoke -l
 $ invoke deploy.metrics
 ```
 
-### Install istio (see `tasks/render.py` and `tasks/download_versions.py` for how additional info)  
+### Install istio  
 
-Includes: tracing and kiali  
-```bash
-$ invoke install.istio
-```
-
-#### View istio ui  
-
-Kubectl port-forward the appropriate services and access on localhost.  
-
-Shortcuts available:  
-
+Get specified version (See tasks/download_versions.py), render istio-demo-auth version of install, and deploy  
 
 ```bash
-$ invoke view.istio         # forward istio premetheus, grafana, jaeger, and kiali services
-$ inv view.istio --window   # -w, forward istio services and open a browser window with shortcuts to localhost interfaces
+$ inv get.versions
+$ inv render.istio
+$ deploy.istio
 ```
 
 ### Install kubernetes Web UI (dashboard)
@@ -57,24 +48,31 @@ $ inv view.istio --window   # -w, forward istio services and open a browser wind
 Kubectl port-forward and access on localhost.  
 
 ```bash
-$ inv install.dashboard
+$ inv deploy.dashboard
 ```
 
-#### view dashboard
+#### View dashboards
+
+Port forwards the kubernetes dashboard and open the login screen. Token will be in the clipboard. Select token login  
+options and cmd-v + return to access.  
 
 ```bash
 $ inv view.dash
 ```
 
-### Kill all port-forwarders
+Port-forward the appropriate services for access on localhost. See cheat_sheet.md for individual interfaces.  
+
+```bash
+$ invoke view.istio         # forward istio premetheus, grafana, jaeger, and kiali services
+```
+
+Example: Access Grafana view of istio prometheus metrics on http://localhost:9090/graph.  
+
+Kill all forwaders  
 
 ```bash
 $ inv view.off
 ```
-
-## Cheat sheet for common kubernetes development tasks
-
-See [Cheat Sheet](cheat_sheet.md)
 
 ## sources
   
@@ -82,18 +80,3 @@ See [Cheat Sheet](cheat_sheet.md)
 • [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics)
 • [istio](https://istio.io)
 • [kubernetes dashboard](https://github.com/kubernetes/dashboard) (_recommend not using dashboard on remote clusters_)
-
-
-
-
-### dependencies  
-
-* invoke tasks make use of installed python packages. recommend creating a local virtualenv and installing the  
-requirements.
-
-
-stern
-helm
-python
-pip
-invoke
