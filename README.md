@@ -19,8 +19,16 @@ Restart Docker for Mac
 
 ## 2. Installable services  
 
+You will need kubectl (install using homebrew). Also, local installation of istio will require Helm.  
+
 ### To see list of pre-defined actions:  
+
+The invoke tasks file can help with rapid setup of this local k8 instance.
+
 ```bash
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+$ pip install --upgrade -r requirements.txt
 $ invoke -l
 ```
 
