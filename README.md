@@ -96,7 +96,7 @@ $ inv view.off
 
 ## sources
 
-• [metrics-server](https://github.com/kubernetes-incubator/metrics-server)
-• [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics)
-• [istio](https://istio.io)
-• [kubernetes dashboard](https://github.com/kubernetes/dashboard) (_recommend not using dashboard on remote clusters_)
+• [metrics-server](https://github.com/kubernetes-incubator/metrics-server)  
+• [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics)  
+• [istio](https://istio.io)  
+• [kubernetes dashboard](https://github.com/kubernetes/dashboard) (_recommend not using dashboard on remote clusters_)  
