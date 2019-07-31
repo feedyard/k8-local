@@ -28,7 +28,7 @@ $ invoke -l
 
 * metrics-server (0.3.3)  
 * kube-state-metrics (1.7.0-rc.1)  
-  
+
 ```bash
 $ invoke deploy.metrics
 ```
@@ -53,6 +53,9 @@ $ inv deploy.dashboard
 
 #### View dashboards
 
+The kubernetes and istio dashboards provide observability into logs and metrics until you have local integration  
+with the primary systems.  
+
 Port forwards the kubernetes dashboard and open the login screen. Token will be in the clipboard. Select token login  
 options and cmd-v + return to access.  
 
@@ -60,7 +63,7 @@ options and cmd-v + return to access.
 $ inv view.dash
 ```
 
-Port-forward the appropriate services for access on localhost. See cheat_sheet.md for individual interfaces.  
+Port-forward the appropriate services for access on localhost. See [cheat sheet](cheat_sheet.md) for individual interfaces.  
 
 ```bash
 $ invoke view.istio         # forward istio premetheus, grafana, jaeger, and kiali services
@@ -68,14 +71,23 @@ $ invoke view.istio         # forward istio premetheus, grafana, jaeger, and kia
 
 Example: Access Grafana view of istio prometheus metrics on http://localhost:9090/graph.  
 
-Kill all forwaders  
+Kill all forwarders  
 
 ```bash
 $ inv view.off
 ```
+#### see the following for more setup and local development capabilities  
+
+[stern](https://github.com/wercker/stern)
+[kube-ps1](https://github.com/jonmosco/kube-ps1) prompt tool  
+[kubefwd](https://github.com/txn2/kubefwd)  
+[hadolint](https://github.com/hadolint/hadolint) Dockerfile lint/inspection  
+[kubeval](https://github.com/garethr/kubeval) k8 yaml lint/inspection  
+[sonabouy](https://github.com/heptio/sonobuoy)  
+
 
 ## sources
-  
+
 • [metrics-server](https://github.com/kubernetes-incubator/metrics-server)
 • [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics)
 • [istio](https://istio.io)
