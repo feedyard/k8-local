@@ -86,7 +86,7 @@ $ inv view.off
 ```
 #### see the following for more setup and local development capabilities  
 
-[stern](https://github.com/wercker/stern)
+[stern](https://github.com/wercker/stern)  
 [kube-ps1](https://github.com/jonmosco/kube-ps1) prompt tool  
 [kubefwd](https://github.com/txn2/kubefwd)  
 [hadolint](https://github.com/hadolint/hadolint) Dockerfile lint/inspection  
