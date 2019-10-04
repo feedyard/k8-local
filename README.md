@@ -7,8 +7,8 @@ Starting with a fresh install of docker-for-mac and kubernetes
 
 ## 1. Edit kubernetes manifest for AdmissionController settings  
 ```bash
-$ screen  ~/Library/Containers/com.docker.docker/Data/vms/0/tty
-$ vi /etc/kubernetes/manifests/kube-apiserver.yaml
+$ screen  ~/Library/Containers/com.docker.docker/Data/vms/0/tty  
+$ vi /etc/kubernetes/manifests/kube-apiserver.yaml  
 ```
 
 edit the following line: (_add text in bold_)  
@@ -23,22 +23,30 @@ You will need kubectl (install using homebrew). Also, local installation of isti
 
 ### To see list of pre-defined actions:  
 
-The invoke tasks file can help with rapid setup of this local k8 instance.
+The invoke tasks file can help with rapid setup of this local k8 instance.  
 
 ```bash
-$ python3 -m venv .venv
-$ source .venv/bin/activate
-$ pip install --upgrade -r requirements.txt
-$ invoke -l
+$ python3 -m venv .venv  
+$ source .venv/bin/activate  
+$ pip install --upgrade -r requirements.txt  
+$ invoke -l  
 ```
 
 ### Install metrics  
 
-* metrics-server (0.3.3)  
-* kube-state-metrics (1.7.0-rc.1)  
+* metrics-server (0.3.5)  
+* kube-state-metrics (v1.8.0-rc.1)  
 
 ```bash
-$ invoke deploy.metrics
+$ deploy.ksm   deploy kube-state-metrics api  
+$ deploy.ms    deploy metrics-server api  
+```
+### Install kubernetes Web UI (dashboard)
+
+Kubectl port-forward and access on localhost.  
+
+```bash
+$ inv deploy.db
 ```
 
 ### Install istio  
@@ -51,14 +59,6 @@ $ inv render.istio
 $ deploy.istio
 ```
 
-### Install kubernetes Web UI (dashboard)
-
-Kubectl port-forward and access on localhost.  
-
-```bash
-$ inv deploy.dashboard
-```
-
 #### View dashboards
 
 The kubernetes and istio dashboards provide observability into logs and metrics until you have local integration  
@@ -68,7 +68,7 @@ Port forwards the kubernetes dashboard and open the login screen. Token will be 
 options and cmd-v + return to access.  
 
 ```bash
-$ inv view.dash
+$ inv view.db
 ```
 
 Port-forward the appropriate services for access on localhost. See [cheat sheet](cheat_sheet.md) for individual interfaces.  
@@ -84,6 +84,14 @@ Kill all forwarders
 ```bash
 $ inv view.off
 ```
+
+#### Using [kind](https://github.com/kubernetes-sigs/kind)  
+
+$ kind create cluster --image kindest/node:v1.15.3 --config kind-config.yaml  
+$ export KUBECONFIG="$(kind get kubeconfig-path --name="kind")"  
+$ kind delete cluster  
+$ unset KUBECONFIG  
+
 #### see the following for more setup and local development capabilities  
 
 [stern](https://github.com/wercker/stern)  
@@ -92,6 +100,7 @@ $ inv view.off
 [hadolint](https://github.com/hadolint/hadolint) Dockerfile lint/inspection  
 [kubeval](https://github.com/garethr/kubeval) k8 yaml lint/inspection  
 [sonabouy](https://github.com/heptio/sonobuoy)  
+[kind](https://github.com/kubernetes-sigs/kind)  
 
 
 ## sources

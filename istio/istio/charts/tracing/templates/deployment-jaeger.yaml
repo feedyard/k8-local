@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: jaeger
-          image: "docker.io/jaegertracing/all-in-one:1.9"
+          image: "docker.io/jaegertracing/all-in-one:1.12"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9411
@@ -48,6 +48,14 @@ spec:
               fieldRef:
                 apiVersion: v1
                 fieldPath: metadata.namespace
+          - name: BADGER_EPHEMERAL
+            value: "false"
+          - name: SPAN_STORAGE_TYPE
+            value: "badger"
+          - name: BADGER_DIRECTORY_VALUE
+            value: "/badger/data"
+          - name: BADGER_DIRECTORY_KEY
+            value: "/badger/key"
           - name: COLLECTOR_ZIPKIN_HTTP_PORT
             value: "9411"
           - name: MEMORY_MAX_TRACES
@@ -62,6 +70,9 @@ spec:
             httpGet:
               path: /
               port: 16686
+          volumeMounts:
+          - name: data
+            mountPath: /badger
           resources:
             requests:
               cpu: 10m
@@ -74,9 +85,9 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - amd64
-                - ppc64le
-                - s390x
+                - "amd64"
+                - "ppc64le"
+                - "s390x"
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 2
             preference:
@@ -84,19 +95,22 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - amd64
+                - "amd64"
           - weight: 2
             preference:
               matchExpressions:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - ppc64le
+                - "ppc64le"
           - weight: 2
             preference:
               matchExpressions:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - s390x      
+                - "s390x"      
+      volumes:
+      - name: data
+        emptyDir: {}
 

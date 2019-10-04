@@ -140,6 +140,8 @@ spec:
       valueType: BOOL
     quota.cache_hit:
       valueType: BOOL
+    context.proxy_version:
+      valueType: STRING
 
 ---
 apiVersion: "config.istio.io/v1alpha2"
@@ -247,7 +249,7 @@ spec:
       sourceOwner: source.owner | ""
       destinationApp: destination.labels["app"] | ""
       destinationIp: destination.ip | ip("0.0.0.0")
-      destinationServiceHost: destination.service.host | ""
+      destinationServiceHost: destination.service.host | request.host | ""
       destinationWorkload: destination.workload.name | ""
       destinationName: destination.name | ""
       destinationNamespace: destination.namespace | ""
@@ -385,7 +387,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       request_protocol: api.protocol | context.protocol | "unknown"
@@ -422,7 +424,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       request_protocol: api.protocol | context.protocol | "unknown"
@@ -459,7 +461,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       request_protocol: api.protocol | context.protocol | "unknown"
@@ -496,7 +498,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       request_protocol: api.protocol | context.protocol | "unknown"
@@ -599,7 +601,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.name | "unknown"
+      destination_service: destination.service.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
@@ -632,7 +634,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.name | "unknown"
+      destination_service: destination.service.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))

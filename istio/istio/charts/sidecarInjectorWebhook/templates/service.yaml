@@ -14,5 +14,8 @@ metadata:
 spec:
   ports:
   - port: 443
+    name: https-inject
+  - port: 15014
+    name: http-monitoring
   selector:
     istio: sidecar-injector

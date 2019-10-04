@@ -15,10 +15,11 @@ metadata:
   annotations:
     checksum/config-volume: f8da08b6b8c170dde721efd680270b2901e750d4aa186ebb6c22bef5b78a43f9
 spec:
+  replicas: 1
   strategy:
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+      maxSurge: 100%
+      maxUnavailable: 25%
   selector:
     matchLabels:
       istio: pilot
@@ -36,7 +37,7 @@ spec:
       serviceAccountName: istio-pilot-service-account
       containers:
         - name: discovery
-          image: "docker.io/istio/pilot:1.2.2"
+          image: "docker.io/istio/pilot:1.3.1"
           imagePullPolicy: IfNotPresent
           args:
           - "discovery"
@@ -44,6 +45,8 @@ spec:
           - --log_output_level=default:info
           - --domain
           - cluster.local
+          - --secureGrpcAddr
+          - ""
           - --keepaliveMaxServerConnectionAge
           - "30m"
           ports:
@@ -73,8 +76,10 @@ spec:
             value: "100"
           - name: PILOT_TRACE_SAMPLING
             value: "100"
-          - name: PILOT_DISABLE_XDS_MARSHALING_TO_ANY
-            value: "1"
+          - name: PILOT_ENABLE_PROTOCOL_SNIFFING_FOR_OUTBOUND
+            value: "true"
+          - name: PILOT_ENABLE_PROTOCOL_SNIFFING_FOR_INBOUND
+            value: "false"
           resources:
             requests:
               cpu: 10m
@@ -87,7 +92,7 @@ spec:
             mountPath: /etc/certs
             readOnly: true
         - name: istio-proxy
-          image: "docker.io/istio/proxyv2:1.2.2"
+          image: "docker.io/istio/proxyv2:1.3.1"
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 15003
@@ -120,6 +125,8 @@ spec:
               fieldRef:
                 apiVersion: v1
                 fieldPath: status.podIP
+          - name: SDS_ENABLED
+            value: "false"
           resources:
             limits:
               cpu: 2000m
@@ -148,9 +155,9 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - amd64
-                - ppc64le
-                - s390x
+                - "amd64"
+                - "ppc64le"
+                - "s390x"
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 2
             preference:
@@ -158,18 +165,18 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - amd64
+                - "amd64"
           - weight: 2
             preference:
               matchExpressions:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - ppc64le
+                - "ppc64le"
           - weight: 2
             preference:
               matchExpressions:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - s390x      
+                - "s390x"      

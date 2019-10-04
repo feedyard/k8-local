@@ -37,7 +37,7 @@ spec:
           - containerPort: 3000
           readinessProbe:
             httpGet:
-              path: /login
+              path: /api/health
               port: 3000
           env:
           - name: GRAFANA_PORT
@@ -57,6 +57,10 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /data/grafana
+          - name: dashboards-istio-citadel-dashboard
+            mountPath: "/var/lib/grafana/dashboards/istio/citadel-dashboard.json"
+            subPath: citadel-dashboard.json
+            readOnly: true
           - name: dashboards-istio-galley-dashboard
             mountPath: "/var/lib/grafana/dashboards/istio/galley-dashboard.json"
             subPath: galley-dashboard.json
@@ -99,9 +103,9 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - amd64
-                - ppc64le
-                - s390x
+                - "amd64"
+                - "ppc64le"
+                - "s390x"
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 2
             preference:
@@ -109,27 +113,30 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - amd64
+                - "amd64"
           - weight: 2
             preference:
               matchExpressions:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - ppc64le
+                - "ppc64le"
           - weight: 2
             preference:
               matchExpressions:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - s390x      
+                - "s390x"      
       volumes:
       - name: config
         configMap:
           name: istio-grafana
       - name: data
         emptyDir: {}
+      - name: dashboards-istio-citadel-dashboard
+        configMap:
+          name:  istio-grafana-configuration-dashboards-citadel-dashboard
       - name: dashboards-istio-galley-dashboard
         configMap:
           name:  istio-grafana-configuration-dashboards-galley-dashboard

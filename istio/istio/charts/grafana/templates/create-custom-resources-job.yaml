@@ -46,7 +46,7 @@ subjects:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: istio-grafana-post-install-1.2.2
+  name: istio-grafana-post-install-1.3.1
   namespace: istio-system
   annotations:
     "helm.sh/hook": post-install
@@ -69,7 +69,7 @@ spec:
       serviceAccountName: istio-grafana-post-install-account
       containers:
         - name: kubectl
-          image: "docker.io/istio/kubectl:1.2.2"
+          image: "docker.io/istio/kubectl:1.3.1"
           command: [ "/bin/bash", "/tmp/grafana/run.sh", "/tmp/grafana/custom-resources.yaml" ]
           volumeMounts:
             - mountPath: "/tmp/grafana"
@@ -87,9 +87,9 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - amd64
-                - ppc64le
-                - s390x
+                - "amd64"
+                - "ppc64le"
+                - "s390x"
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 2
             preference:
@@ -97,18 +97,18 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - amd64
+                - "amd64"
           - weight: 2
             preference:
               matchExpressions:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - ppc64le
+                - "ppc64le"
           - weight: 2
             preference:
               matchExpressions:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - s390x      
+                - "s390x"      

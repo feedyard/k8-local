@@ -4,6 +4,1108 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: istio-grafana-configuration-dashboards-citadel-dashboard
+  namespace: istio-system
+  labels:
+    app: grafana
+    chart: grafana
+    heritage: Tiller
+    release: istio
+    istio: grafana
+data:
+  citadel-dashboard.json: '{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Performance",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "CPU usage across Citadel instances.",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 1
+      },
+      "id": 10,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(container_cpu_usage_seconds_total{job=\"kubernetes-cadvisor\",container_name=~\"citadel\", pod_name=~\"istio-citadel-.*\"}[1m]))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Citadel CPU usage rate",
+          "refId": "A"
+        },
+        {
+          "expr": "irate(process_cpu_seconds_total{job=\"citadel\"}[1m])",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Citadel CPU usage irate",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CPU",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "Citadel process memory statistics.",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 1
+      },
+      "id": 12,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "process_virtual_memory_bytes{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Virtual Memory",
+          "refId": "A"
+        },
+        {
+          "expr": "process_resident_memory_bytes{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Resident Memory",
+          "refId": "B"
+        },
+        {
+          "expr": "go_memstats_heap_sys_bytes{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Heap Memory Total",
+          "refId": "C"
+        },
+        {
+          "expr": "go_memstats_alloc_bytes{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Heap Memory Allocated",
+          "refId": "E"
+        },
+        {
+          "expr": "go_memstats_heap_inuse_bytes{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Heap Inuse",
+          "refId": "F"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Memory",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 1
+      },
+      "id": 14,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "go_goroutines{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Goroutines",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Goroutines",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 28,
+      "panels": [],
+      "title": "General",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "Total number of CSR requests made to Citadel.",
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 30,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "citadel_server_csr_count{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "CSR Request Count",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CSR Requests",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "The number of certificates issuances that have succeeded.",
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 32,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "citadel_server_success_cert_issuance_count{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Certificates Issued",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Certificates Issued",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 13
+      },
+      "id": 23,
+      "panels": [],
+      "title": "Errors",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "The number of errors occurred when creating the CSR.",
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 14
+      },
+      "id": 20,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "citadel_secret_controller_csr_err_count{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "CSR Creation Error Count",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CSR Creation Errors",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 8,
+        "y": 14
+      },
+      "id": 24,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "citadel_server_csr_parsing_err_count{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "CSR Parse Error Count",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CSR Parse Errors",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "The number of authentication failures.",
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 16,
+        "y": 14
+      },
+      "id": 26,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "citadel_server_authentication_failure_count{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Authentication Failure Count",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Authentication Failures",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 4,
+      "panels": [],
+      "title": "Secret Controller",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "The number of certificates created due to service account creation.",
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 20
+      },
+      "id": 2,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "citadel_secret_controller_svc_acc_created_cert_count{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "SA Secrets Created",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Service Account Secrets Created (due to SA creation)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "short",
+          "label": "Certs Created",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "The number of certificates deleted due to service account deletion.",
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 8,
+        "y": 20
+      },
+      "id": 16,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "citadel_secret_controller_svc_acc_deleted_cert_count{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "SA Secrets Deleted",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Service Account Secrets Deleted (due to SA deletion)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "short",
+          "label": "Certs Created",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "The number of certificates recreated due to secret deletion (service account still exists).",
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 16,
+        "y": 20
+      },
+      "id": 6,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "citadel_secret_controller_secret_deleted_cert_count{job=\"citadel\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "SA Secrets Recreated",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Service Account Secrets Recreated (due to errant deletion)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "short",
+          "label": "Certs Created",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 18,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "Istio Citadel Dashboard",
+  "uid": "OOyOqb4Wz",
+  "version": 1
+}'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: istio-grafana-configuration-dashboards-galley-dashboard
   namespace: istio-system
   labels:
@@ -226,7 +1328,7 @@ data:
           "refId": "H"
         },
         {
-          "expr": "sum(container_memory_usage_bytes{container_name=~\"galley\", pod_name=~\"istio-galley-.*\"})",
+          "expr": "sum(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",container_name=~\"galley\", pod_name=~\"istio-galley-.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Total (kis)",
@@ -417,7 +1519,7 @@ data:
           "refId": "A"
         },
         {
-          "expr": "container_fs_usage_bytes{container_name=~\"galley\", pod_name=~\"istio-galley-.*\"}",
+          "expr": "container_fs_usage_bytes{job=\"kubernetes-cadvisor\",container_name=~\"galley\", pod_name=~\"istio-galley-.*\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ container_name }} ",
@@ -509,14 +1611,14 @@ data:
           "refId": "A"
         },
         {
-          "expr": "galley_mcp_source_clients_total",
+          "expr": "istio_mcp_clients_total{component=\"galley\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "clients_total",
           "refId": "B"
         },
         {
-          "expr": "go_goroutines{job=\"galley\"}/galley_mcp_source_clients_total",
+          "expr": "go_goroutines{job=\"galley\"}/sum(istio_mcp_clients_total{component=\"galley\"}) without (component)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "avg_goroutines_per_client",
@@ -1573,7 +2675,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(galley_mcp_source_clients_total)",
+          "expr": "sum(istio_mcp_clients_total{component=\"galley\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Clients",
@@ -1658,7 +2760,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(collection)(irate(galley_mcp_source_request_acks_total[1m]) * 60)",
+          "expr": "sum by(collection)(irate(istio_mcp_request_acks_total{component=\"galley\"}[1m]) * 60)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -1743,7 +2845,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(galley_mcp_source_request_nacks_total[1m]) * 60",
+          "expr": "rate(istio_mcp_request_nacks_total{component=\"galley\"}[1m]) * 60",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -1847,54 +2949,6 @@ metadata:
     istio: grafana
 data:
   istio-mesh-dashboard.json: '{
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "5.2.3"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": "5.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "text",
-      "name": "Text",
-      "version": "5.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -2002,7 +3056,6 @@ data:
       ],
       "thresholds": "",
       "title": "Global Request Volume",
-      "transparent": false,
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -2084,7 +3137,6 @@ data:
       ],
       "thresholds": "95, 99, 99.5",
       "title": "Global Success Rate (non-5xx responses)",
-      "transparent": false,
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -2166,7 +3218,6 @@ data:
       ],
       "thresholds": "",
       "title": "4xxs",
-      "transparent": false,
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -2248,7 +3299,6 @@ data:
       ],
       "thresholds": "",
       "title": "5xxs",
-      "transparent": false,
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -2261,6 +3311,331 @@ data:
       "valueName": "avg"
     },
     {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 6
+      },
+      "id": 113,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(galley_istio_networking_virtualservices) / count(up{job=\"galley\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Virtual Services",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 6,
+        "y": 6
+      },
+      "id": 114,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(galley_istio_networking_destinationrules) / count(up{job=\"galley\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Destination Rules",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 12,
+        "y": 6
+      },
+      "id": 115,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(galley_istio_networking_gateways) / count(up{job=\"galley\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Gateways",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 6
+      },
+      "id": 116,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(galley_istio_authentication_meshpolicies) / count(up{job=\"galley\"})",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Authentication Mesh Policies",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
       "columns": [],
       "datasource": "Prometheus",
       "fontSize": "100%",
@@ -2268,7 +3643,7 @@ data:
         "h": 21,
         "w": 24,
         "x": 0,
-        "y": 6
+        "y": 9
       },
       "hideTimeOverride": false,
       "id": 73,
@@ -2460,7 +3835,7 @@ data:
           "refId": "A"
         },
         {
-          "expr": "label_join(histogram_quantile(0.50, sum(rate(istio_request_duration_seconds_bucket{reporter=\"destination\"}[1m])) by (le, destination_workload, destination_workload_namespace)), \"destination_workload_var\", \".\", \"destination_workload\", \"destination_workload_namespace\")",
+          "expr": "label_join((histogram_quantile(0.50, sum(rate(istio_request_duration_milliseconds_bucket{reporter=\"destination\"}[1m])) by (le, destination_workload, destination_workload_namespace)) / 1000) or histogram_quantile(0.50, sum(rate(istio_request_duration_seconds_bucket{reporter=\"destination\"}[1m])) by (le, destination_workload, destination_workload_namespace)), \"destination_workload_var\", \".\", \"destination_workload\", \"destination_workload_namespace\")",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2469,7 +3844,7 @@ data:
           "refId": "B"
         },
         {
-          "expr": "label_join(histogram_quantile(0.90, sum(rate(istio_request_duration_seconds_bucket{reporter=\"destination\"}[1m])) by (le, destination_workload, destination_workload_namespace)), \"destination_workload_var\", \".\", \"destination_workload\", \"destination_workload_namespace\")",
+          "expr": "label_join((histogram_quantile(0.90, sum(rate(istio_request_duration_milliseconds_bucket{reporter=\"destination\"}[1m])) by (le, destination_workload, destination_workload_namespace)) / 1000) or histogram_quantile(0.90, sum(rate(istio_request_duration_seconds_bucket{reporter=\"destination\"}[1m])) by (le, destination_workload, destination_workload_namespace)), \"destination_workload_var\", \".\", \"destination_workload\", \"destination_workload_namespace\")",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2478,7 +3853,7 @@ data:
           "refId": "D"
         },
         {
-          "expr": "label_join(histogram_quantile(0.99, sum(rate(istio_request_duration_seconds_bucket{reporter=\"destination\"}[1m])) by (le, destination_workload, destination_workload_namespace)), \"destination_workload_var\", \".\", \"destination_workload\", \"destination_workload_namespace\")",
+          "expr": "label_join((histogram_quantile(0.99, sum(rate(istio_request_duration_milliseconds_bucket{reporter=\"destination\"}[1m])) by (le, destination_workload, destination_workload_namespace)) / 1000) or histogram_quantile(0.99, sum(rate(istio_request_duration_seconds_bucket{reporter=\"destination\"}[1m])) by (le, destination_workload, destination_workload_namespace)), \"destination_workload_var\", \".\", \"destination_workload\", \"destination_workload_namespace\")",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2500,7 +3875,6 @@ data:
       "timeFrom": null,
       "title": "HTTP/GRPC Workloads",
       "transform": "table",
-      "transparent": false,
       "type": "table"
     },
     {
@@ -2511,7 +3885,7 @@ data:
         "h": 18,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 30
       },
       "hideTimeOverride": false,
       "id": 109,
@@ -2668,7 +4042,6 @@ data:
       "timeFrom": null,
       "title": "TCP Workloads",
       "transform": "table",
-      "transparent": false,
       "type": "table"
     },
     {
@@ -2682,7 +4055,7 @@ data:
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 48
       },
       "id": 111,
       "legend": {
@@ -2719,6 +4092,7 @@ data:
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Istio Components by Version",
       "tooltip": {
@@ -2726,7 +4100,6 @@ data:
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -2760,7 +4133,7 @@ data:
     }
   ],
   "refresh": "5s",
-  "schemaVersion": 16,
+  "schemaVersion": 18,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -2797,7 +4170,8 @@ data:
   },
   "timezone": "browser",
   "title": "Istio Mesh Dashboard",
-  "version": 4
+  "uid": "G8wLrJIZk",
+  "version": 5
 }
 '
 ---
@@ -3138,28 +4512,28 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(sum(container_memory_usage_bytes{pod_name=~\"istio-telemetry-.*\"}) / (sum(irate(istio_requests_total[1m])) / 1000)) / (sum(irate(istio_requests_total{source_workload=\"istio-ingressgateway\"}[1m])) >bool 10)",
+          "expr": "(sum(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",pod_name=~\"istio-telemetry-.*\"}) / (sum(irate(istio_requests_total[1m])) / 1000)) / (sum(irate(istio_requests_total{source_workload=\"istio-ingressgateway\"}[1m])) >bool 10)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "istio-telemetry / 1k rps",
           "refId": "A"
         },
         {
-          "expr": "sum(container_memory_usage_bytes{pod_name=~\"istio-ingressgateway-.*\"}) / count(container_memory_usage_bytes{pod_name=~\"istio-ingressgateway-.*\",container_name!=\"POD\"})",
+          "expr": "sum(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",pod_name=~\"istio-ingressgateway-.*\"}) / count(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",pod_name=~\"istio-ingressgateway-.*\",container_name!=\"POD\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "per istio-ingressgateway",
           "refId": "B"
         },
         {
-          "expr": "sum(container_memory_usage_bytes{namespace!=\"istio-system\",container_name=\"istio-proxy\"}) / count(container_memory_usage_bytes{namespace!=\"istio-system\",container_name=\"istio-proxy\"})",
+          "expr": "sum(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",namespace!=\"istio-system\",container_name=\"istio-proxy\"}) / count(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",namespace!=\"istio-system\",container_name=\"istio-proxy\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "per istio proxy",
           "refId": "C"
         },
         {
-          "expr": "(sum(container_memory_usage_bytes{pod_name=~\"istio-policy-.*\"}) / (sum(irate(istio_requests_total[1m])) / 1000))/ (sum(irate(istio_requests_total{source_workload=\"istio-ingressgateway\"}[1m])) >bool 10)",
+          "expr": "(sum(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",pod_name=~\"istio-policy-.*\"}) / (sum(irate(istio_requests_total[1m])) / 1000))/ (sum(irate(istio_requests_total{source_workload=\"istio-ingressgateway\"}[1m])) >bool 10)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "istio-policy / 1k rps",
@@ -3459,7 +4833,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(container_memory_usage_bytes{container_name=\"istio-proxy\"})",
+          "expr": "sum(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",container_name=\"istio-proxy\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -3633,7 +5007,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(container_fs_usage_bytes{container_name=\"istio-proxy\"})",
+          "expr": "sum(container_fs_usage_bytes{job=\"kubernetes-cadvisor\", container_name=\"istio-proxy\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ container_name }}",
@@ -3791,7 +5165,7 @@ data:
           "step": 2
         },
         {
-          "expr": "sum(container_memory_usage_bytes{container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"})",
+          "expr": "sum(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -3800,7 +5174,7 @@ data:
           "step": 2
         },
         {
-          "expr": "container_memory_usage_bytes{container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"}",
+          "expr": "container_memory_usage_bytes{job=\"kubernetes-cadvisor\",container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -4002,7 +5376,7 @@ data:
           "refId": "A"
         },
         {
-          "expr": "container_fs_usage_bytes{container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"}",
+          "expr": "container_fs_usage_bytes{job=\"kubernetes-cadvisor\", container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ container_name }}",
@@ -4246,7 +5620,7 @@ data:
           "step": 2
         },
         {
-          "expr": "sum(container_memory_usage_bytes{container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*\"})",
+          "expr": "sum(container_memory_usage_bytes{job=\"kubernetes-cadvisor\",container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -4255,7 +5629,7 @@ data:
           "step": 2
         },
         {
-          "expr": "container_memory_usage_bytes{container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*\"}",
+          "expr": "container_memory_usage_bytes{job=\"kubernetes-cadvisor\",container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -4457,7 +5831,7 @@ data:
           "refId": "A"
         },
         {
-          "expr": "container_fs_usage_bytes{container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*\"}",
+          "expr": "container_fs_usage_bytes{job=\"kubernetes-cadvisor\", container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ container_name }}",
@@ -4889,7 +6263,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\",destination_service=~\"$service\"}[1m])) by (le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\",destination_service=~\"$service\"}[1m])) by (le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\",destination_service=~\"$service\"}[1m])) by (le))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4897,7 +6271,7 @@ data:
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\",destination_service=~\"$service\"}[1m])) by (le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\",destination_service=~\"$service\"}[1m])) by (le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\",destination_service=~\"$service\"}[1m])) by (le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -4905,7 +6279,7 @@ data:
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\",destination_service=~\"$service\"}[1m])) by (le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\",destination_service=~\"$service\"}[1m])) by (le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\",destination_service=~\"$service\"}[1m])) by (le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5241,7 +6615,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_service=~\"$service\"}[1m])) by (le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\",destination_service=~\"$service\"}[1m])) by (le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_service=~\"$service\"}[1m])) by (le))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -5249,7 +6623,7 @@ data:
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_service=~\"$service\"}[1m])) by (le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\",destination_service=~\"$service\"}[1m])) by (le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_service=~\"$service\"}[1m])) by (le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5257,7 +6631,7 @@ data:
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_service=~\"$service\"}[1m])) by (le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\",destination_service=~\"$service\"}[1m])) by (le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_service=~\"$service\"}[1m])) by (le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5639,7 +7013,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5648,7 +7022,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5657,7 +7031,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.95, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5666,7 +7040,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5675,7 +7049,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5684,7 +7058,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5693,7 +7067,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.95, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5702,7 +7076,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -6493,7 +7867,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -6502,7 +7876,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -6511,7 +7885,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.95, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le)) / 1000) or histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -6520,7 +7894,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -6529,7 +7903,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -6538,7 +7912,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -6547,7 +7921,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.95, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le)) / 1000) or histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -6556,7 +7930,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_service=~\"$service\", destination_workload=~\"$dstwl\", destination_workload_namespace=~\"$dstns\"}[1m])) by (destination_workload, destination_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -7547,7 +8921,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\"}[1m])) by (le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\",destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\"}[1m])) by (le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\"}[1m])) by (le))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -7555,7 +8929,7 @@ data:
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\"}[1m])) by (le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\",destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\"}[1m])) by (le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\"}[1m])) by (le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -7563,7 +8937,7 @@ data:
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\"}[1m])) by (le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\",destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\"}[1m])) by (le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\",destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\"}[1m])) by (le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8016,7 +9390,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8025,7 +9399,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8034,7 +9408,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.95, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8043,7 +9417,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8052,7 +9426,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8061,7 +9435,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8070,7 +9444,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.95, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8079,7 +9453,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"destination\", connection_security_policy!=\"mutual_tls\", destination_workload=~\"$workload\", destination_workload_namespace=~\"$namespace\", source_workload=~\"$srcwl\", source_workload_namespace=~\"$srcns\"}[1m])) by (source_workload, source_workload_namespace, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8842,7 +10216,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8851,7 +10225,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8860,7 +10234,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
+          "expr": "(histogram_quantile(0.95, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le)) / 1000) or histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8869,7 +10243,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8878,7 +10252,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
+          "expr": "(histogram_quantile(0.50, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le)) / 1000) or histogram_quantile(0.50, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8887,7 +10261,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
+          "expr": "(histogram_quantile(0.90, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le)) / 1000) or histogram_quantile(0.90, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8896,7 +10270,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
+          "expr": "(histogram_quantile(0.95, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le)) / 1000) or histogram_quantile(0.95, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -8905,7 +10279,7 @@ data:
           "step": 2
         },
         {
-          "expr": "histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
+          "expr": "(histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le)) / 1000) or histogram_quantile(0.99, sum(irate(istio_request_duration_seconds_bucket{reporter=\"source\", connection_security_policy!=\"mutual_tls\", source_workload=~\"$workload\", source_workload_namespace=~\"$namespace\", destination_service=~\"$dstsvc\"}[1m])) by (destination_service, le))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -9846,7 +11220,7 @@ data:
           "refId": "G"
         },
         {
-          "expr": "sum(label_replace(container_memory_usage_bytes{container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*|istio-policy-.*\"}, \"service\", \"$1\" , \"pod_name\", \"(istio-telemetry|istio-policy)-.*\")) by (service)",
+          "expr": "sum(label_replace(container_memory_usage_bytes{job=\"kubernetes-cadvisor\", container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*|istio-policy-.*\"}, \"service\", \"$1\" , \"pod_name\", \"(istio-telemetry|istio-policy)-.*\")) by (service)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -9854,7 +11228,7 @@ data:
           "refId": "C"
         },
         {
-          "expr": "sum(label_replace(container_memory_usage_bytes{container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*|istio-policy-.*\"}, \"service\", \"$1\" , \"pod_name\", \"(istio-telemetry|istio-policy)-.*\")) by (container_name, service)",
+          "expr": "sum(label_replace(container_memory_usage_bytes{job=\"kubernetes-cadvisor\", container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*|istio-policy-.*\"}, \"service\", \"$1\" , \"pod_name\", \"(istio-telemetry|istio-policy)-.*\")) by (container_name, service)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -10050,7 +11424,7 @@ data:
           "refId": "A"
         },
         {
-          "expr": "sum(label_replace(container_fs_usage_bytes{container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*|istio-policy-.*\"}, \"service\", \"$1\" , \"pod_name\", \"(istio-telemetry|istio-policy)-.*\")) by (container_name, service)",
+          "expr": "sum(label_replace(container_fs_usage_bytes{job=\"kubernetes-cadvisor\", container_name=~\"mixer|istio-proxy\", pod_name=~\"istio-telemetry-.*|istio-policy-.*\"}, \"service\", \"$1\" , \"pod_name\", \"(istio-telemetry|istio-policy)-.*\")) by (container_name, service)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ service }} - {{ container_name }}",
@@ -11420,7 +12794,7 @@ data:
   "editable": false,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": 6,
+  "id": 11,
   "links": [],
   "panels": [
     {
@@ -11629,22 +13003,20 @@ data:
           "step": 2
         },
         {
-          "expr": "sum(container_memory_usage_bytes{container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"})",
+          "expr": "container_memory_usage_bytes{job=\"kubernetes-cadvisor\", container_name=~\"discovery\", pod_name=~\"istio-pilot-.*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "Total (k8s)",
-          "refId": "C",
+          "legendFormat": "Discovery (container)",
+          "refId": "B",
           "step": 2
         },
         {
-          "expr": "container_memory_usage_bytes{container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"}",
+          "expr": "container_memory_usage_bytes{job=\"kubernetes-cadvisor\", container_name=~\"istio-proxy\", pod_name=~\"istio-pilot-.*\"}",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{ container_name }} (k8s)",
-          "refId": "B",
-          "step": 2
+          "intervalFactor": 1,
+          "legendFormat": "Sidecar (container)",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -11725,30 +13097,28 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{job=\"kubernetes-cadvisor\",container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"}[1m]))",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{job=\"kubernetes-cadvisor\",container_name=\"discovery\", pod_name=~\"istio-pilot-.*\"}[1m]))",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "Total (k8s)",
-          "refId": "A",
-          "step": 2
-        },
-        {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{job=\"kubernetes-cadvisor\",container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"}[1m])) by (container_name)",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{ container_name }} (k8s)",
-          "refId": "B",
-          "step": 2
+          "intervalFactor": 1,
+          "legendFormat": "Discovery (container)",
+          "refId": "A"
         },
         {
           "expr": "irate(process_cpu_seconds_total{job=\"pilot\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "pilot (self-reported)",
+          "legendFormat": "Discovery (process)",
           "refId": "C",
+          "step": 2
+        },
+        {
+          "expr": "sum(irate(container_cpu_usage_seconds_total{job=\"kubernetes-cadvisor\",container_name=\"istio-proxy\", pod_name=~\"istio-pilot-.*\"}[1m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 2,
+          "legendFormat": "Sidecar (container)",
+          "refId": "B",
           "step": 2
         }
       ],
@@ -11830,22 +13200,19 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_open_fds{job=\"pilot\"}",
-          "format": "time_series",
-          "hide": true,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "Open FDs (pilot)",
-          "refId": "A"
-        },
-        {
-          "expr": "container_fs_usage_bytes{container_name=~\"discovery|istio-proxy\", pod_name=~\"istio-pilot-.*\"}",
+          "expr": "container_fs_usage_bytes{job=\"kubernetes-cadvisor\", container_name=\"discovery\", pod_name=~\"istio-pilot-.*\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{ container_name }}",
+          "legendFormat": "Discovery",
           "refId": "B",
           "step": 2
+        },
+        {
+          "expr": "container_fs_usage_bytes{job=\"kubernetes-cadvisor\", container_name=\"istio-proxy\", pod_name=~\"istio-pilot-.*\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Sidecar",
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -11994,11 +13361,11 @@ data:
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "description": "Shows pilot pushes",
+      "description": "Shows the rate of pilot pushes",
       "fill": 1,
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 8,
         "x": 0,
         "y": 15
       },
@@ -12027,14 +13394,32 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(pilot_xds_pushes{type!~\".*_senderr\"}[1m])) by (type)",
+          "expr": "sum(irate(pilot_xds_pushes{type=\"cds\"}[1m]))",
           "format": "time_series",
-          "instant": false,
-          "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{ type }}",
-          "refId": "B",
-          "step": 2
+          "legendFormat": "Cluster",
+          "refId": "C"
+        },
+        {
+          "expr": "sum(irate(pilot_xds_pushes{type=\"eds\"}[1m]))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Endpoints",
+          "refId": "D"
+        },
+        {
+          "expr": "sum(irate(pilot_xds_pushes{type=\"lds\"}[1m]))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Listeners",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(irate(pilot_xds_pushes{type=\"rds\"}[1m]))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Routes",
+          "refId": "E"
         }
       ],
       "thresholds": [],
@@ -12090,14 +13475,16 @@ data:
       "fill": 1,
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
+        "w": 8,
+        "x": 8,
         "y": 15
       },
       "id": 67,
       "legend": {
         "avg": false,
         "current": false,
+        "hideEmpty": true,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": true,
@@ -12118,15 +13505,15 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(sum(pilot_xds_cds_reject{job=\"pilot\"}) by (node, err), \"node\", \"$1\", \"node\", \".*~.*~(.*)~.*\")",
+          "expr": "sum(pilot_xds_cds_reject{job=\"pilot\"}) or (absent(pilot_xds_cds_reject{job=\"pilot\"}) - 1)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "Rejected CDS Configs - {{ node }}: {{ err }}",
+          "legendFormat": "Rejected CDS Configs",
           "refId": "C"
         },
         {
-          "expr": "pilot_xds_eds_reject{job=\"pilot\"}",
+          "expr": "sum(pilot_xds_eds_reject{job=\"pilot\"}) or (absent(pilot_xds_eds_reject{job=\"pilot\"}) - 1)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -12134,26 +13521,80 @@ data:
           "refId": "D"
         },
         {
-          "expr": "rate(pilot_xds_write_timeout{job=\"pilot\"}[1m])",
+          "expr": "sum(pilot_xds_rds_reject{job=\"pilot\"}) or (absent(pilot_xds_rds_reject{job=\"pilot\"}) - 1)",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "Rejected RDS Configs",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(pilot_xds_lds_reject{job=\"pilot\"}) or (absent(pilot_xds_lds_reject{job=\"pilot\"}) - 1)",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "Rejected LDS Configs",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(rate(pilot_xds_write_timeout{job=\"pilot\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Write Timeouts",
           "refId": "F"
         },
         {
-          "expr": "rate(pilot_xds_push_timeout{job=\"pilot\"}[1m])",
+          "expr": "sum(rate(pilot_total_xds_internal_errors{job=\"pilot\"}[1m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "Internal Errors",
+          "refId": "H"
+        },
+        {
+          "expr": "sum(rate(pilot_total_xds_rejects{job=\"pilot\"}[1m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "Config Rejection Rate",
+          "refId": "E"
+        },
+        {
+          "expr": "sum(rate(pilot_xds_push_context_errors{job=\"pilot\"}[1m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "Push Context Errors",
+          "refId": "K"
+        },
+        {
+          "expr": "sum(rate(pilot_xds_pushes{type!~\"lds|cds|rds|eds\"}[1m])) by (type)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Push Errors ({{ type }})",
+          "refId": "L"
+        },
+        {
+          "expr": "sum(rate(pilot_xds_push_errors{job=\"pilot\"}[1m])) by (type)",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "Push Errors ({{ type }})",
+          "refId": "I"
+        },
+        {
+          "expr": "sum(rate(pilot_xds_push_timeout{job=\"pilot\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Push Timeouts",
           "refId": "G"
         },
         {
-          "expr": "sum(rate(pilot_xds_push_errors{job=\"pilot\"}[1m]))",
+          "expr": "sum(rate(pilot_xds_push_timeout_failures{job=\"pilot\"}[1m]))",
           "format": "time_series",
-          "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "Push Errors ({{ type }})",
-          "refId": "I"
+          "legendFormat": "Push Timeouts Failures",
+          "refId": "J"
         }
       ],
       "thresholds": [],
@@ -12198,204 +13639,19 @@ data:
       }
     },
     {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 23
-      },
-      "id": 64,
-      "panels": [],
-      "title": "xDS",
-      "type": "row"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "description": "Shows the total time it takes to push a config update to a proxy",
       "fill": 1,
       "gridPos": {
-        "h": 6,
-        "w": 8,
-        "x": 0,
-        "y": 24
-      },
-      "id": 40,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(irate(envoy_cluster_update_success{cluster_name=\"xds-grpc\"}[1m]))",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "legendFormat": "XDS GRPC Successes",
-          "refId": "C"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Updates",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "ops",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "ops",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 6,
-        "w": 8,
-        "x": 8,
-        "y": 24
-      },
-      "id": 42,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "round(sum(rate(envoy_cluster_update_attempt{cluster_name=\"xds-grpc\"}[1m])) - sum(rate(envoy_cluster_update_success{cluster_name=\"xds-grpc\"}[1m])))",
-          "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "XDS GRPC ",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Failures",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "ops",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 6,
+        "h": 8,
         "w": 8,
         "x": 16,
-        "y": 24
+        "y": 15
       },
-      "id": 41,
+      "id": 624,
       "legend": {
         "avg": false,
         "current": false,
@@ -12410,7 +13666,7 @@ data:
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
-      "pointradius": 5,
+      "pointradius": 2,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
@@ -12419,19 +13675,39 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(envoy_cluster_upstream_cx_active{cluster_name=\"xds-grpc\"})",
+          "expr": "histogram_quantile(0.5, sum(rate(pilot_proxy_convergence_time_bucket[1m])) by (le))",
           "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "Pilot (XDS GRPC)",
-          "refId": "C",
-          "step": 2
+          "intervalFactor": 1,
+          "legendFormat": "p50 ",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum(rate(pilot_proxy_convergence_time_bucket[1m])) by (le))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "p90",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(pilot_proxy_convergence_time_bucket[1m])) by (le))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "p99",
+          "refId": "C"
+        },
+        {
+          "expr": "histogram_quantile(0.999, sum(rate(pilot_proxy_convergence_time_bucket[1m])) by (le))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "p99.9",
+          "refId": "D"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Active Connections",
+      "title": "Proxy Push Time",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -12447,7 +13723,7 @@ data:
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "s",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -12479,12 +13755,14 @@ data:
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 30
+        "y": 23
       },
       "id": 45,
       "legend": {
         "avg": false,
         "current": false,
+        "hideEmpty": true,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": true,
@@ -12494,7 +13772,7 @@ data:
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -12507,6 +13785,7 @@ data:
         {
           "expr": "pilot_conflict_inbound_listener{job=\"pilot\"}",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 1,
           "legendFormat": "Inbound Listeners",
           "refId": "B"
@@ -12514,6 +13793,7 @@ data:
         {
           "expr": "pilot_conflict_outbound_listener_http_over_current_tcp{job=\"pilot\"}",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 1,
           "legendFormat": "Outbound Listeners (http over current tcp)",
           "refId": "A"
@@ -12521,6 +13801,7 @@ data:
         {
           "expr": "pilot_conflict_outbound_listener_tcp_over_current_tcp{job=\"pilot\"}",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 1,
           "legendFormat": "Outbound Listeners (tcp over current tcp)",
           "refId": "C"
@@ -12528,6 +13809,7 @@ data:
         {
           "expr": "pilot_conflict_outbound_listener_tcp_over_current_http{job=\"pilot\"}",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 1,
           "legendFormat": "Outbound Listeners (tcp over current http)",
           "refId": "D"
@@ -12566,7 +13848,7 @@ data:
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -12585,7 +13867,7 @@ data:
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 30
+        "y": 23
       },
       "id": 47,
       "legend": {
@@ -12625,55 +13907,11 @@ data:
           "refId": "B"
         },
         {
-          "expr": "label_replace(sum(pilot_xds_cds_reject{job=\"pilot\"}) by (node, err), \"node\", \"$1\", \"node\", \".*~.*~(.*)~.*\")",
-          "format": "time_series",
-          "hide": true,
-          "intervalFactor": 1,
-          "legendFormat": "Rejected CDS Configs - {{ node }}: {{ err }}",
-          "refId": "C"
-        },
-        {
-          "expr": "pilot_xds_eds_reject{job=\"pilot\"}",
-          "format": "time_series",
-          "hide": true,
-          "intervalFactor": 1,
-          "legendFormat": "Rejected EDS Configs",
-          "refId": "D"
-        },
-        {
           "expr": "pilot_xds{job=\"pilot\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Connected Endpoints",
           "refId": "E"
-        },
-        {
-          "expr": "rate(pilot_xds_write_timeout{job=\"pilot\"}[1m])",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "Write Timeouts",
-          "refId": "F"
-        },
-        {
-          "expr": "rate(pilot_xds_push_timeout{job=\"pilot\"}[1m])",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "Push Timeouts",
-          "refId": "G"
-        },
-        {
-          "expr": "rate(pilot_xds_pushes{job=\"pilot\"}[1m])",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "Pushes ({{ type }})",
-          "refId": "H"
-        },
-        {
-          "expr": "rate(pilot_xds_push_errors{job=\"pilot\"}[1m])",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "Push Errors ({{ type }})",
-          "refId": "I"
         }
       ],
       "thresholds": [],
@@ -12718,6 +13956,180 @@ data:
       }
     },
     {
+      "columns": [],
+      "datasource": "Prometheus",
+      "description": "Clusters in this table do not have any endpoints known to pilot. This could be from referencing subsets that do not have any instances, or pods marked as NotReady",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 23
+      },
+      "id": 51,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": null,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "Clusters",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "sum(pilot_xds_eds_instances{job=\"pilot\", cluster=~\".+\\\\|.+\"}) by (cluster) < 1",
+          "format": "time_series",
+          "hide": false,
+          "instant": true,
+          "intervalFactor": 1,
+          "legendFormat": "{{cluster}}",
+          "refId": "B"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Clusters with no known endpoints",
+      "transform": "timeseries_aggregations",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      },
+      "id": 64,
+      "panels": [],
+      "title": "Envoy Information",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Shows details about Envoy proxies in the mesh",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 32
+      },
+      "id": 40,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(irate(envoy_cluster_upstream_cx_total{cluster_name=\"xds-grpc\"}[1m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "XDS Connections",
+          "refId": "C"
+        },
+        {
+          "expr": "sum(irate(envoy_cluster_upstream_cx_connect_fail{cluster_name=\"xds-grpc\"}[1m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "XDS Connection Failures",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(increase(envoy_server_hot_restart_epoch[1m]))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Envoy Restarts",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Envoy Details",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ops",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "ops",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -12727,180 +14139,10 @@ data:
       "gridPos": {
         "h": 8,
         "w": 8,
-        "x": 16,
-        "y": 30
-      },
-      "id": 49,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "label_replace(sum(pilot_xds_cds_reject{job=\"pilot\"}) by (node, err), \"node\", \"$1\", \"node\", \".*~.*~(.*)~.*\")",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{ node }}  ({{ err }})",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Rejected CDS Configs",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 0,
-        "y": 38
-      },
-      "id": 52,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "label_replace(sum(pilot_xds_eds_reject{job=\"pilot\"}) by (node, err), \"node\", \"$1\", \"node\", \".*~.*~(.*)~.*\")",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{ node }} ({{err}})",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Rejected EDS Configs",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 7,
-        "w": 8,
         "x": 8,
-        "y": 38
+        "y": 32
       },
-      "id": 54,
+      "id": 41,
       "legend": {
         "avg": false,
         "current": false,
@@ -12924,18 +14166,19 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(sum(pilot_xds_lds_reject{job=\"pilot\"}) by (node, err), \"node\", \"$1\", \"node\", \".*~.*~(.*)~.*\")",
+          "expr": "sum(envoy_cluster_upstream_cx_active{cluster_name=\"xds-grpc\"})",
           "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{ node }} ({{err}})",
-          "refId": "A"
+          "intervalFactor": 2,
+          "legendFormat": "XDS Active Connections",
+          "refId": "C",
+          "step": 2
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Rejected LDS Configs",
+      "title": "XDS Active Connections",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -12978,17 +14221,20 @@ data:
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "Shows the size of XDS requests and responses",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 8,
         "x": 16,
-        "y": 38
+        "y": 32
       },
-      "id": 53,
+      "id": 42,
       "legend": {
         "avg": false,
         "current": false,
+        "hideEmpty": false,
+        "hideZero": false,
         "max": false,
         "min": false,
         "show": true,
@@ -13009,18 +14255,41 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(sum(pilot_xds_rds_reject{job=\"pilot\"}) by (node, err), \"node\", \"$1\", \"node\", \".*~.*~(.*)~.*\")",
+          "expr": "max(rate(envoy_cluster_upstream_cx_rx_bytes_total{cluster_name=\"xds-grpc\"}[1m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "XDS Response Bytes Max",
+          "refId": "D"
+        },
+        {
+          "expr": "quantile(0.5, rate(envoy_cluster_upstream_cx_rx_bytes_total{cluster_name=\"xds-grpc\"}[1m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "XDS Response Bytes Average",
+          "refId": "B"
+        },
+        {
+          "expr": "max(rate(envoy_cluster_upstream_cx_tx_bytes_total{cluster_name=\"xds-grpc\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{ node }} ({{err}})",
+          "legendFormat": "XDS Request Bytes Max",
           "refId": "A"
+        },
+        {
+          "expr": "quantile(.5, rate(envoy_cluster_upstream_cx_tx_bytes_total{cluster_name=\"xds-grpc\"}[1m]))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "XDS Request Bytes Average",
+          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Rejected RDS Configs",
+      "title": "XDS Requests Size",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -13036,7 +14305,7 @@ data:
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "Bps",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -13044,104 +14313,12 @@ data:
           "show": true
         },
         {
-          "format": "short",
+          "format": "ops",
           "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "outbound|80||default-http-backend.kube-system.svc.cluster.local": "rgba(255, 255, 255, 0.97)"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 0,
-        "y": 45
-      },
-      "id": 51,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "outbound|80||default-http-backend.kube-system.svc.cluster.local",
-          "yaxis": 1
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(pilot_xds_eds_instances{job=\"pilot\"}) by (cluster)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{ cluster }}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "EDS Instances",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -13189,7 +14366,6 @@ data:
   "timezone": "browser",
   "title": "Istio Pilot Dashboard",
   "uid": "3--MLVZZk",
-  "version": 1
-}
-'
+  "version": 11
+}'
 ---

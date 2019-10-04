@@ -14,7 +14,7 @@ data:
   config.yaml: |
     istio_namespace: istio-system
     auth:
-      strategy: "login"
+      strategy: login
     server:
       port: 20001
       web_root: /kiali
