@@ -14,7 +14,7 @@ spec:
     - command:
         - kube-apiserver
         - --authorization-mode=Node,RBAC
-        - --enable-admission-plugins=Initializers,NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
+        - --enable-admission-plugins=Initializers,NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook, AlwaysPullImages
         - --advertise-address=192.168.65.3
         - --allow-privileged=true
         - --client-ca-file=/run/config/pki/ca.crt

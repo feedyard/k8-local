@@ -3,9 +3,14 @@
 _basic setup for local kubernetes development_  
 
 Starting with a fresh install of docker-for-mac and kubernetes  
-(setting memory available to docker resources to 8gb)  
 
-## 1. Edit kubernetes manifest for AdmissionController settings  
+## 1. Local Kubernetes  
+
+### docker-for-mac  
+_(setting memory available to docker resources at 8gb)_   
+
+Edit kubernetes manifest for AdmissionController settings. _(if you are on a Mac just go with docker-for-mac. )_  
+
 ```bash
 $ screen  ~/Library/Containers/com.docker.docker/Data/vms/0/tty  
 $ vi /etc/kubernetes/manifests/kube-apiserver.yaml  
@@ -19,9 +24,13 @@ Restart Docker for Mac
 
 ## 2. Installable services  
 
-You will need kubectl (install using homebrew). Also, local installation of istio will require Helm.  
+### local kubernetes related packages used in this setup (recommend homebrew to manage)  
 
-### To see list of pre-defined actions:  
+kubectl  
+helm  
+stern  
+
+### To use a set of pre-defined actions:  
 
 The invoke tasks file can help with rapid setup of this local k8 instance.  
 
