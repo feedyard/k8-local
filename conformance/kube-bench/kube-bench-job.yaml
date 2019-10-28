@@ -11,7 +11,8 @@ spec:
       hostPID: true
       containers:
       - name: kube-bench
-        image: aquasec/kube-bench:latest
+        #image: aquasec/kube-bench:latest
+        image: quay.io/feedyard/feedyard-kube-bench:0.0.9
         command: ["kube-bench"]
         volumeMounts:
         - name: var-lib-etcd

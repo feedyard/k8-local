@@ -4,6 +4,7 @@ from tasks import download
 from tasks import render
 from tasks import view
 from tasks import delete
+from tasks import test
 
 ns = Collection()
 
@@ -12,3 +13,4 @@ ns.add_collection(download, name='get')
 ns.add_collection(render)
 ns.add_collection(view)
 ns.add_collection(delete, name='del')
+ns.add_collection(test)
