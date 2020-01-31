@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buildkite-agent
+  labels:
+    app: buildkite-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buildkite-agent
+  template:
+    metadata:
+      labels:
+        app: buildkite-agent
+    spec:
+      serviceAccount: buildkite-agent
+      containers:
+        - name: buildkite-agent
+          image: "buildkite/agent:3.12.0"
+          imagePullPolicy: IfNotPresent
+          env:
+            # BUILDKITE AGENT ENV VARS
+            - name: BUILDKITE_AGENT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: buildkite-secret
+                  key: buildkite-agent-token
+            - name: BUILDKITE_AGENT_META_DATA
+              value: "role=agent"
+            # EXTRA BUILDKITE AGENT ENV VARS
+          livenessProbe:
+            null
+          resources:
+            {}
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/vcap/data/sys/run/docker/docker.sock
+            #path: /var/run/docker.sock

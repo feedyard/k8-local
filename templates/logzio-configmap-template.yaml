@@ -1,9 +1,0 @@
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: fluentd-logzio
-  namespace: kube-system
-data:
-  logzio-token: {{ logzio-token }}
-  logzio-url: https://listener.logz.io:8071
