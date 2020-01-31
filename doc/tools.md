@@ -25,6 +25,6 @@ _local terminal customization_
 [kube-ps1](https://github.com/jonmosco/kube-ps1)  
 [oh-my-zsh](https://ohmyz.sh)  
 
-<p align="center"><img width="498" alt="oh-my-zsh with kube-ps1" src="oh-my-zsh-capture.png"></p>
+<p align="center"><img width="800" alt="oh-my-zsh with kube-ps1" src="oh-my-zsh-capture.png"></p>
 
 
