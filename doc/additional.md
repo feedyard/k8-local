@@ -1,17 +1,5 @@
 
-### Conformance testing
-
-#### kube-bench
-
-```bash
-$ inv test.kubebench
-```
-
-Runs a kube-bench job and tests for FAIL output.  Uses https://github.com/feedyard/feedyard-kube-bench, see for details on customizing benchmark checks.  
-
-
-
-
+### Additional 
 
 #### Using [kind](https://github.com/kubernetes-sigs/kind)  
 

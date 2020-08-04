@@ -3,3 +3,8 @@
 
 # for the alert monitor
 # kubectl port-forward -n monitoring alertmanager-kube-prometheus-0 9093
+
+curl -v -HHost:httpbin.localhost --cacert old_httpbin.localhost.crt "https://httpbin.localhost/status/418"
+
+
+

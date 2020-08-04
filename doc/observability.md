@@ -1,5 +1,5 @@
 
-### View dashboards
+### 5. View dashboards
 
 #### Install kubernetes Web UI ([dashboard](https://github.com/kubernetes/dashboard))  (_recommend not using dashboard on remote clusters_)  
 
@@ -20,9 +20,10 @@ the admin-user token in your clipboard. (You will receive a 'unsigned' cert erro
 
 #### Istio Dashboards
 
-$ istioctl dashboard prometheus
+$ istioctl dashboard grafana
+$ istioctl dashboard kiali
 $ istioctl dashbaord jaeger
-$ istioctl dashboard
+$ istioctl dashboard prometheus
 
 Port-forward the appropriate services for access on localhost. See [cheat sheet](cheat_sheet.md) for individual interfaces.  
 
@@ -37,10 +38,3 @@ Kill all forwarders
 ```bash
 $ inv view.off
 ```
-
-
-
-Kiali is part of the istio deployment. The local username and password are:
-
-a2lhbGk=
-

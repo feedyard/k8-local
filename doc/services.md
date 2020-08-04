@@ -1,4 +1,4 @@
-### Deploy to kubernetes  
+### 4. Deploy supporting services to kubernetes  
 
 The python `invoke` files in this repository provide a convenient way to install the following services.  
 
@@ -41,6 +41,9 @@ _or add the local folder to your $PATH_
 ```bash
 $ deploy.istio     # default profile with telemetry.enabled=true
 ```
+
+• configure dnsmasq to direct a local domain to the istio ingressgateway  
+
 
 ### opa-istio-plugin  
 

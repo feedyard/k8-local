@@ -1,3 +1,3 @@
-## quick start guide  
+## 1. quick start guide  
 
-1. Setup the basic
+1. pending

@@ -9,41 +9,65 @@ def ms(ctx):
 
 @task
 def ksm(ctx):
-    """deploy locally kube-state-metrics api v1.9.3"""
+    """deploy locally kube-state-metrics api v1.9.7"""
     if is_local():
       ctx.run('kubectl apply -f metrics/kube-state-metrics --recursive')
 
 @task
 def dash(ctx):
-    """deploy locally kubernetes dashboard v2.0.0-rc2"""
+    """deploy locally kubernetes dashboard v2.0.0"""
     if is_local():
       ctx.run("kubectl apply -f dashboard/dashboard-namespace.yaml")
       ctx.run('kubectl apply -f dashboard/ --recursive')
 
 @task
 def istio(ctx):
-    """deploy istio locally v1.4.3"""
-    if is_local():
-      ctx.run("kubectl apply --filename templates/kiali-secrets.yaml")
-      ctx.run("istioctl manifest apply --set profile=default --set values.tracing.enabled=true --set telemetry.enabled=true")
-      ctx.run("istioctl manifest apply --set values.kiali.enabled=true --set values.kiali.dashboard.jaegerURL=http://jaeger-query:16686 --set values.kiali.dashboard.grafanaURL=http://grafana:3000")
+    """deploy istio locally (current 1.6.5)"""
 
-def buildkite(ctx):
-    """deploy standard buildkite agent"""
+    INSTALL_ISTIO="""
+    istioctl install --set profile=demo \
+                     --set tag=1.6.5-distroless \
+                     --set meshConfig.accessLogFile="/dev/stdout" \
+                     --set meshConfig.accessLogEncoding="JSON" \
+                     --set values.kiali.tag=v1.21.0
+    """
     if is_local():
-      ctx.run("kubectl delete secret buildkite-secret --ignore-not-found")
-      ctx.run("kubectl create secret generic buildkite-secret --from-literal=buildkite-agent-token=$BUILDKITE_AGENT_TOKEN")
-      ctx.run("kubectl apply --filename buildkite --recursive")
+      ctx.run(INSTALL_ISTIO)
+
+@task(optional=['tls'])
+def httpbin(ctx, tls=None):
+    """httpbin ingress examples"""
+    if is_local():
+      ctx.run("kubectl apply -f httpbin/deploy/httpbin-namespace.yaml")
+      ctx.run("kubectl apply -f httpbin/deploy --recursive")
+      if tls:
+        print('using tls')
+        ctx.run('mkcert -cert-file httpbin.localhost.crt -key-file httpbin.localhost.key httpbin.localhost localhost 127.0.0.1 ::1')
+        ctx.run('kubectl create -n istio-system secret tls httpbin-credential --key=httpbin.localhost.key --cert=httpbin.localhost.crt')
+        ctx.run("kubectl apply -f httpbin/tls --recursive")
+      else:
+        ctx.run("kubectl apply -f httpbin/simple --recursive")
 
 @task
 def bookinfo(ctx):
     if is_local():
-      ctx.run("kubectl label namespace default istio-injection=enabled --overwrite")
-      ctx.run("kubectl apply -f istio/samples/bookinfo/platform/kube/bookinfo.yaml")
-      ctx.run("kubectl apply -f istio/samples/bookinfo/networking/bookinfo-gateway.yaml")
-      ctx.run("export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')")
-      ctx.run("export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name==\"http2\")].port}')")
-      ctx.run("export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name==\"https\")].port}')")
+      ctx.run("kubectl apply -f bookinfo/bookinfo-namespace.yaml")
+      ctx.run("kubectl apply -f bookinfo --recursive")
+
+  #ctx.run("kubectl apply -f istio/samples/bookinfo/networking/bookinfo-gateway.yaml")
+      # ctx.run("export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')")
+      # ctx.run("export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')")
+      # ctx.run("export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')")
+      # ctx.run("export TCP_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')")
+      # ctx.run("export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT")
+      # ctx.run("curl -s "http://${GATEWAY_URL}/productpage" | grep -o "<title>.*</title>"")
+
+@task
+def dnsconf(ctx):
+    """configure dns"""
+    if is_local():
+      print('pending config dns')
+    
 
 @task
 def localcert(ctx):
@@ -51,7 +75,7 @@ def localcert(ctx):
 
 
 
-    openssl req -x509 -out localhost.crt -keyout localhost.key \
-  -newkey rsa:2048 -nodes -sha256 \
-  -subj '/CN=localhost' -extensions EXT -config <( \
-   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+  #   openssl req -x509 -out localhost.crt -keyout localhost.key \
+  # -newkey rsa:2048 -nodes -sha256 \
+  # -subj '/CN=localhost' -extensions EXT -config <( \
+  #  printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")

@@ -1,4 +1,4 @@
-## 1. Local Kubernetes install/setup (with userspace virtualization, on macos) 
+## 3. Local Kubernetes install/setup (with userspace virtualization, on macos) 
 
 Virtualization running in Userspace will consistently outperform full virtualization, all else being equal. RAM is a potentially critical requirement. (8gb at least in order to support istio.)  
 
@@ -18,7 +18,7 @@ $ brew install minikube
 
 • configure minikube settings and start  
 
-```
+```bash
 $ minikube config set vm-driver hyperkit
 $ minikube config set memory 12288
 $ minikube config set cpus 6
@@ -27,7 +27,7 @@ $ minikube start --extra-config=kubelet.authentication-token-webhook=true
 
 • Launch minikube LoadBalancer *In separate terminal window*  
 
-```
+```bash
 $ minikube [tunnel](https://minikube.sigs.k8s.io/docs/tasks/loadbalancer/#using-minikube-tunnel)
 ```
 
