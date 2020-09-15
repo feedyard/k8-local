@@ -14,6 +14,13 @@ spec:
     app: mongodb
 
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mongodb
+  namespace: bookinfo
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -34,6 +41,7 @@ spec:
         app: mongodb
         version: "v1.16.2"
     spec:
+      serviceAccountName: mongodb
       containers:
       - name: mongodb 
         image: docker.io/istio/examples-bookinfo-mongodb:1.16.2

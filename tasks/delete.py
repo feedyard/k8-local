@@ -36,4 +36,3 @@ def httpbin(ctx):
 def bookinfo(ctx):
     if is_local():
       ctx.run("kubectl delete -f bookinfo --recursive")
-      ctx.run("kubectl delete -f bookinfo/bookinfo-namespace.yaml")

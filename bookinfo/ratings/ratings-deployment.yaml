@@ -20,15 +20,13 @@ kind: ServiceAccount
 metadata:
   name: ratings
   namespace: bookinfo
-  labels:
-    app: ratings
-    service: ratings
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ratings
+  namespace: bookinfo
   labels:
     app: ratings
     version: "v1.16.2"

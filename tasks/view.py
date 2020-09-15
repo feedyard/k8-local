@@ -29,3 +29,10 @@ def off(ctx):
     """kill all port-forwarders"""
     if is_local():
       ctx.run('pkill kubectl')
+
+@task
+def cert(ctx,domain):
+    """curl and display certificate information for provided domain"""
+    ctx.run(f"curl -I -v --cacert {domain}.localhost.crt 'https://{domain}.localhost/productpage'")
+
+# curl -I -v --cacert bookinfo.localhost.crt 'https://bookinfo.localhost/productpage'

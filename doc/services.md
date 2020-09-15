@@ -19,8 +19,8 @@ Use `invoke -l` to see a list of available shortcuts.
 
 ### metrics collectors 
 
-• metrics-server (0.3.6)  
-• kube-state-metrics (v1.9.3)  
+• metrics-server (0.3.7)  
+• kube-state-metrics (v1.9.7)  
 
 ```bash
 $ invoke deploy.ksm   deploy kube-state-metrics api  
@@ -29,7 +29,7 @@ $ invoke deploy.ms    deploy metrics-server api
 
 ### istio  
 
-• Install the istioctl cli (v1.4.3)  
+• Install the istioctl cli (v1.7.0)  
 
 ```bash
 $ mv istio/bin/istioctl /usr/local/bin/istioctl
@@ -41,8 +41,6 @@ _or add the local folder to your $PATH_
 ```bash
 $ deploy.istio     # default profile with telemetry.enabled=true
 ```
-
-• configure dnsmasq to direct a local domain to the istio ingressgateway  
 
 
 ### opa-istio-plugin  

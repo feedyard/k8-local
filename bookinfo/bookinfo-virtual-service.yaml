@@ -10,11 +10,18 @@ spec:
   gateways:
   - bookinfo-gateway
   http:
-  - match:
+  - fault:
+      abort:
+        httpStatus: 500
+        percentage:
+          value: 15
+    match:
     - uri:
         exact: /productpage
     - uri:
-        prefix: /static/*
+        prefix: /static
+    - uri:
+        regex: '^.*\.(ico|png|jpg)$'
     - uri:
         exact: /login
     - uri:
@@ -26,3 +33,5 @@ spec:
         host: productpage
         port:
           number: 9080
+
+

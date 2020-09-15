@@ -6,9 +6,9 @@ Creating a meaningful local ingress configuration requires a few specific steps.
 
 These local configuration and development examples assume you are using the minikube tunnel feature to simulate a loadbalancer that the istio install will use for the ingressgateway service. See the [all-in-one kubernetes setup guide](doc/kubernetes.md).  
 
-*.localhost will used as the local domain thoughout this guide, though you may substitute for whatever domain you want. You can follow the steps in the [services setup guide](doc/services.md).
+*.localhost will used as the local domain thoughout this guide, though you may substitute for whatever domain you want.
 
-Or, if you don't mind the additional steps for each local environment setup you can simple edit the `hostfile` on your local machine to include a specific domain. The first deployment in these example uses httpbin and you could just add a hostfile entry of `X.X.X.X httpbin.localhost` substituting the ClusterIP used by the istio ingressgateway.  
+You can simple edit the `hostfile` on your local machine to include a specific domain. The first deployment in these example uses httpbin and you could just add a hostfile entry of `X.X.X.X httpbin.localhost` substituting the ClusterIP used by the istio ingressgateway.  
 
 [hostess](https://github.com/cbednarski/hostess) is a small utility that can make that kind of hostfile management easier on macos.  
 

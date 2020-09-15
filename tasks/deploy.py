@@ -3,7 +3,7 @@ from tasks.shared import is_local
 
 @task
 def ms(ctx):
-    """deploy locally metrics-server api v0.3.6"""
+    """deploy locally metrics-server api v0.3.7"""
     if is_local():
       ctx.run('kubectl apply -f metrics/metrics-server --recursive')
 
@@ -15,24 +15,46 @@ def ksm(ctx):
 
 @task
 def dash(ctx):
-    """deploy locally kubernetes dashboard v2.0.0"""
+    """deploy locally kubernetes dashboard v2.0.3"""
     if is_local():
       ctx.run("kubectl apply -f dashboard/dashboard-namespace.yaml")
       ctx.run('kubectl apply -f dashboard/ --recursive')
 
 @task
 def istio(ctx):
-    """deploy istio locally (current 1.6.5)"""
+    """deploy istio locally (current 1.7.0)"""
 
     INSTALL_ISTIO="""
-    istioctl install --set profile=demo \
-                     --set tag=1.6.5-distroless \
-                     --set meshConfig.accessLogFile="/dev/stdout" \
-                     --set meshConfig.accessLogEncoding="JSON" \
-                     --set values.kiali.tag=v1.21.0
-    """
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istiocontrolplane
+spec:
+  profile: default
+  tag: 1.7.0-distroless
+  meshConfig.accessLogFile: "/dev/stdout"
+  meshConfig.accessLogEncoding: "JSON"
+  components:
+    ingressGateways:
+    - enabled: true
+      k8s:
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+  values:
+    kiali:
+      createDemoSecret: true
+      tag: v1.23.0
+"""
     if is_local():
-      ctx.run(INSTALL_ISTIO)
+      # ctx.run("istioctl operator init")
+      # ctx.run("kubectl create ns istio-system")
+      ctx.run(f"echo '{INSTALL_ISTIO}' | kubectl apply -f - ")
 
 @task(optional=['tls'])
 def httpbin(ctx, tls=None):
@@ -54,28 +76,44 @@ def bookinfo(ctx):
       ctx.run("kubectl apply -f bookinfo/bookinfo-namespace.yaml")
       ctx.run("kubectl apply -f bookinfo --recursive")
 
-  #ctx.run("kubectl apply -f istio/samples/bookinfo/networking/bookinfo-gateway.yaml")
-      # ctx.run("export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')")
-      # ctx.run("export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')")
-      # ctx.run("export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')")
-      # ctx.run("export TCP_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')")
-      # ctx.run("export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT")
-      # ctx.run("curl -s "http://${GATEWAY_URL}/productpage" | grep -o "<title>.*</title>"")
-
 @task
 def dnsconf(ctx):
     """configure dns"""
     if is_local():
       print('pending config dns')
     
-
 @task
-def localcert(ctx):
-    ctx.run('')
+def localdomain(ctx, domain):
+    """Use mkcert to generate a valid cert for a local CA"""
+    ctx.run(f"mkcert -cert-file {domain}.localhost.crt -key-file {domain}.localhost.key {domain}.localhost \"*.{domain}.localhost\"")
+    ctx.run(f"kubectl create -n istio-system secret tls {domain}-credential --key={domain}.localhost.key --cert={domain}.localhost.crt")
 
 
 
-  #   openssl req -x509 -out localhost.crt -keyout localhost.key \
-  # -newkey rsa:2048 -nodes -sha256 \
-  # -subj '/CN=localhost' -extensions EXT -config <( \
-  #  printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+kubectl apply -f - <<EOF
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istiocontrolplane
+spec:
+  profile: default
+  tag: 1.7.0-distroless
+  meshConfig.accessLogFile: "/dev/stdout"
+  meshConfig.accessLogEncoding: "JSON"
+  components:
+    ingressGateways:
+    - enabled: true
+      k8s:
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+  values:
+    kiali:
+      createDemoSecret: true
+      tag: v1.23.0
+EOF

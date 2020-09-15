@@ -20,8 +20,6 @@ kind: ServiceAccount
 metadata:
   name: reviews
   namespace: bookinfo
-  labels:
-    account: reviews
 
 ---
 apiVersion: apps/v1

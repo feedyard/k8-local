@@ -20,8 +20,6 @@ kind: ServiceAccount
 metadata:
   name: productpage
   namespace: bookinfo
-  labels:
-    account: productpage
 
 ---
 apiVersion: apps/v1

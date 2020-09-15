@@ -11,6 +11,7 @@ rules:
 - apiGroups: ["metrics.k8s.io"]
   resources: ["pods", "nodes"]
   verbs: ["get", "list", "watch"]
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -24,6 +25,7 @@ subjects:
 - kind: ServiceAccount
   name: metrics-server
   namespace: kube-system
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -38,6 +40,7 @@ subjects:
 - kind: ServiceAccount
   name: metrics-server
   namespace: kube-system
+
 ---
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
@@ -83,7 +86,7 @@ spec:
         emptyDir: {}
       containers:
       - name: metrics-server
-        image: k8s.gcr.io/metrics-server-amd64:v0.3.6
+        image: k8s.gcr.io/metrics-server/metrics-server:v0.3.7
         imagePullPolicy: IfNotPresent
         args:
           - --cert-dir=/tmp
@@ -136,6 +139,7 @@ rules:
   - get
   - list
   - watch
+  
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
