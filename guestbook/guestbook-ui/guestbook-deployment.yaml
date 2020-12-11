@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guestbook
+  namespace: blue-local
+  labels:
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/version: v3.0.0
+    app.kubernetes.io/component: guestbook-ui
+    app.kubernetes.io/part-of: guestbook
+    app.kubernetes.io/environment: local
+    app: guestbook
+    version: v3.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: guestbook
+      version: v3.0.0
+  template:
+    metadata:
+      labels:
+        app: guestbook
+        version: v3.0.0
+    spec:
+      serviceAccountName: guestbook
+      containers:
+      - name: guestbook
+        image: k8s.gcr.io/guestbook:v3
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http-guestbook
+          containerPort: 3000
+

@@ -4,7 +4,7 @@ Virtualization running in Userspace will consistently outperform full virtualiza
 
 • [minikube](https://minikube.sigs.k8s.io) on [hyperkit(https://github.com/moby/hyperkit)], or  
 
-• [docker-for-mac edge](https://docs.docker.com/docker-for-mac/edge-release-notes/) with kubernetes  
+• [docker desktop](https://www.docker.com/products/docker-desktop) with kubernetes  
 
 
 ### minikube
@@ -22,29 +22,31 @@ $ brew install minikube
 $ minikube config set vm-driver hyperkit
 $ minikube config set memory 12288
 $ minikube config set cpus 6
-$ minikube start --extra-config=kubelet.authentication-token-webhook=true
+$ minikube start --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=Webhook --extra-config=scheduler.address=0.0.0.0 --extra-config=controller-manager.address=0.0.0.0
 ```
 
-• Launch minikube LoadBalancer *In separate terminal window*  
+• Launch minikube [LoadBalancer](https://minikube.sigs.k8s.io/docs/tasks/loadbalancer/#using-minikube-tunnel) *in separate terminal window*  
 
 ```bash
-$ minikube [tunnel](https://minikube.sigs.k8s.io/docs/tasks/loadbalancer/#using-minikube-tunnel)
+$ minikube tunnel
 ```
 
-### docker-for-mac  
-
-• Install Docker-for-Mac edge  
-• Edit kubernetes manifest AdmissionController settings  
-
+See the IP used by the istio ingressgateway  
 ```bash
-$ screen  ~/Library/Containers/com.docker.docker/Data/vms/0/tty  
-$ vi /etc/kubernetes/manifests/kube-apiserver.yaml  
+$ kubectl get svc istio-ingressgateway -n istio-system
 ```
 
-until Kubernetes version >= 1.16, edit the following line: (_add text in bold_)  
-```
---enable-admission-plugins=Initializers,NodeRestriction,__MutatingAdmissionWebhook,ValidatingAdmissionWebhook__  
+You will see something like:  
+```bash
+NAME                   TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)                                                                      AGE
+istio-ingressgateway   LoadBalancer   10.96.138.70   10.96.138.70   15021:32452/TCP,80:30496/TCP,443:31765/TCP,15012:31912/TCP,15443:32267/TCP   19m
 ```
 
-• Restart Docker-for-Mac   
+The EXTERNAL-IP is the address to use when setting localhost DNS values.  
 
+### Local k8s security profile
+
+To see how the default local development configuration compares to EKS using the CIS benchmark:  
+```bash
+$ inv view.bench
+```

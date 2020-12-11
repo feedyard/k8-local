@@ -2,11 +2,11 @@
 
 _local kubernetes development setup_  
 
-Example configuration for local development of _services_ running on [Kubernetes](https://kubernetes.io)  
-that includes a service mesh and other common kubernetes cloud capabilites. Clone this repositry and  
-follow the instructions that follow:
+Example configuration for local microservice development on [Kubernetes](https://kubernetes.io).  
 
-1. [Getting started](doc/getting_started.md)
+Includes a service mesh and other common tools. Clone this repositry and read through the instructions that follow: 
+
+1. [Getting ready](doc/getting_ready.md)
 1. [Local tools and setup](doc/tools.md)
 1. [Kubernetes all-in-one cluster](doc/kubernetes.md)
 1. [Cluster services](doc/services.md)

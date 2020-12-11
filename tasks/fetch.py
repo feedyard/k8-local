@@ -3,7 +3,6 @@ from tasks.shared import is_local
 
 FETCH_ISTIO="""
   curl -L https://istio.io/downloadIstio | ISTIO_VERSION={0} sh - && \
-  mv -f istio-{0}/bin/istioctl /usr/local/bin/istioctl && \
   istioctl version --remote=false
 """
 

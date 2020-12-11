@@ -10,14 +10,9 @@ def metrics(ctx):
 @task
 def istio(ctx):
     """delete istio"""
-
-    INSTALL_DELETE="""
-    istioctl manifest generate  --set profile=demo \
-                                --set tag=1.6.5-distroless \
-                                --set values.kiali.tag=v1.21.0 | kubectl delete -f -
-    """
     if is_local():
-      ctx.run(INSTALL_DELETE)
+      ctx.run("istioctl manifest generate | kubectl delete -f -")
+      ctx.run("kubectl delete ns istio-system --grace-period=0 --force")
 
 @task
 def dash(ctx):
@@ -29,7 +24,7 @@ def dash(ctx):
 def httpbin(ctx):
     """httpbin ingress examples"""
     if is_local():
-      ctx.run("kubectl delete ns httpbin")
+      ctx.run("kubectl delete ns httpbin --grace-period=0 --force")
       ctx.run("kubectl delete secret -n istio-system httpbin-credential")
 
 @task

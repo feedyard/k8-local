@@ -25,10 +25,16 @@ def token(ctx):
       print('dashboard token copied to clipboard')
 
 @task
-def off(ctx):
+def dashoff(ctx):
     """kill all port-forwarders"""
     if is_local():
       ctx.run('pkill kubectl')
+
+@task
+def bench(ctx):
+    """Display results from kube-bench run against local cluster"""
+    if is_local():
+      ctx.run('bash tasks/kube-bench.sh')
 
 @task
 def cert(ctx,domain):
