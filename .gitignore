@@ -4,3 +4,4 @@
 *.pem
 *.key
 istio-*/
+istiotools/istio-manifest.yaml
