@@ -1,16 +1,19 @@
-# feedyard/k8-local
+<div align="center">
+  <h3>Deprecated</h3>
+  <h1>Moved to ThoughtWorks-DPS</h1>
 
-_local kubernetes development setup_  
+</div>
+<br />
 
-Example configuration for local development of _services_ running on [Kubernetes](https://kubernetes.io)  
-that includes a service mesh and other common kubernetes cloud capabilites. Clone this repositry and  
-follow the instructions that follow:
+As of December 2020, for lastest content and future updates go to [ThoughtWorks-DPS/k8-local-environment](https://github.com/ThoughtWorks-DPS/k8-local-environment).  
 
-1. Getting started
+Example configuration for local microservice development on [Kubernetes](https://kubernetes.io).  
+
+1. [Getting ready](doc/getting_ready.md)
+1. [Local tools and setup](doc/tools.md)
 1. [Kubernetes all-in-one cluster](doc/kubernetes.md)
 1. [Cluster services](doc/services.md)
-1. [Local tools and setup](doc/tools.md)
 1. [Observability](doc/observability.md)
-1. [Code example](doc/examples.md)
+1. [Local ingress](doc/ingress.md)
+1. [Local development pattern](doc/example.md)
 1. [Additional capabilities](additional.md)
-

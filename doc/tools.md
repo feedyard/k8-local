@@ -8,7 +8,9 @@
 [kubectx](https://github.com/ahmetb/kubectx) • cli to quickly swtich between local or remote clusters  
 [skaffold](https://github.com/GoogleContainerTools/skaffold) • continuous development on local kubernetes  
 [stern](https://github.com/wercker/stern)  • tails logs to the terminal from any number of local or remote pods  
-[mkcert](https://github.com/FiloSottile/mkcert) • Automated management of certificates and CA for local https    
+[mkcert](https://github.com/FiloSottile/mkcert) • automated management of certificates and CA for local https    
+
+Review the [example](examples.md) using istio bookinfo to see how these tools can be used to create your local experience.  
 
 _local cli interaction with remote platform services_  
 
