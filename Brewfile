@@ -1,0 +1,18 @@
+brew "minikube"
+brew "kubectl"
+brew "helm"
+brew "kubectx"
+brew "krew"
+brew "stern"
+brew "mkcert"
+brew "istioctl"
+brew "skaffold"
+brew "txn2/tap/kubefwd"
+
+brew "awscli"
+brew "aws-vault"
+brew "git-secrets"
+
+brew "hadolint"
+tap "instrumenta/instrumenta"
+brew "kubeval"

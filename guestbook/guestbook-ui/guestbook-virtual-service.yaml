@@ -1,0 +1,31 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: guestbook
+  namespace: blue-local
+  labels:
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/version: v3.0.0
+    app.kubernetes.io/component: guestbook-ui
+    app.kubernetes.io/part-of: guestbook
+    app.kubernetes.io/environment: local
+    app: guestbook
+    version: v3.0.0
+spec:
+  hosts:
+  - "local.guestbook.com"
+  gateways:
+  - istio-system/local-gateway
+  http:
+    - name: guestbook-ui-route
+      match:
+      - uri:
+          prefix: "/guestbook"
+      rewrite:
+        uri: "/"
+      route:
+      - destination:
+          host: guestbook.blue-local.svc.cluster.local
+          port:
+            number: 3000

@@ -1,0 +1,66 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: redis-master
+  namespace: blue-local
+spec:
+  host: redis-master.blue-local.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 30ms
+        tcpKeepalive:
+          time: 7200s
+          interval: 75s
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: default
+    labels:
+      app: redis
+      version: v1.0.0
+      role: master
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: redis-slave
+  namespace: blue-local
+spec:
+  host: redis-slave.blue-local.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 30ms
+        tcpKeepalive:
+          time: 7200s
+          interval: 75s
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: default
+    labels:
+      app: redis
+      version: v1.0.0
+      role: slave
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: guestbook
+  namespace: blue-local
+spec:
+  host: guestbook.blue-local.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: default
+    labels:
+      app: guestbook
+      version: v3.0.0

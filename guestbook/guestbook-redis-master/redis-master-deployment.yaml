@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-master
+  namespace: blue-local
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: v1.0.0
+    app.kubernetes.io/component: guestbook-redis
+    app.kubernetes.io/part-of: guestbook
+    app.kubernetes.io/environment: local
+    app: redis
+    version: v1.0.0
+    role: master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      version: v1.0.0
+      role: master
+  template:
+    metadata:
+      labels:
+        app: redis
+        version: v1.0.0
+        role: master
+    spec:
+      serviceAccountName: redis
+      containers:
+      - image: k8s.gcr.io/redis:e2e
+        imagePullPolicy: IfNotPresent
+        name: redis-master
+        ports:
+        - name: tcp-redis
+          containerPort: 6379

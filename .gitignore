@@ -1,3 +1,7 @@
 *.env
 .vscode
-logzio/logzio-configmap.yaml
+*.crt
+*.pem
+*.key
+istio-*/
+istiotools/istio-manifest.yaml

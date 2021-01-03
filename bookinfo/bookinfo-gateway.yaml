@@ -1,0 +1,36 @@
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: Gateway
+# metadata:
+#   name: bookinfo-gateway
+#   namespace: bookinfo
+# spec:
+#   selector:
+#     istio: ingressgateway # use istio default controller
+#   servers:
+#   - port:
+#       number: 80
+#       name: http
+#       protocol: HTTP
+#     hosts:
+#     - "bookinfo.localhost"
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: bookinfo-gateway
+  namespace: bookinfo
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 443
+      name: bookinfo-https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: bookinfo-credential
+    hosts:
+    - "bookinfo.localhost"
